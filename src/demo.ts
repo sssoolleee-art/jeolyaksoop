@@ -11,8 +11,8 @@ function maybeSeedDemo() {
   monday.setHours(0, 0, 0, 0);
   const at = (day: number, hour: number) =>
     new Date(monday.getTime() + day * 86400000 + hour * 3600000 + 1800000).getTime();
-  const rec = (category: string, amount: number, day: number, hour: number) =>
-    ({ id: `${day}-${hour}-${category}`, category, amount, createdAt: at(day, hour) });
+  const rec = (category: string, amount: number, day: number, hour: number, memo?: string) =>
+    ({ id: `${day}-${hour}-${category}`, category, amount, createdAt: at(day, hour), memo });
 
   const doneTree = (id: number, themeId: string, daysAgo: number, savedAmount: number) => ({
     id: String(id), themeId, water: 120,
@@ -24,7 +24,7 @@ function maybeSeedDemo() {
   localStorage.setItem('app', JSON.stringify({
     onboarded: true,
     records: [
-      rec('delivery', 23000, 0, 23), rec('delivery', 18000, 1, 22), rec('delivery', 25000, 3, 23),
+      rec('delivery', 23000, 0, 23, '야식 치킨 세트… 간신히 참음'), rec('delivery', 18000, 1, 22), rec('delivery', 25000, 3, 23),
       rec('coffee', 4500, 1, 8), rec('coffee', 5500, 2, 9), rec('coffee', 4500, 4, 8),
       rec('taxi', 15000, 2, 23), rec('shopping', 35000, 3, 1), rec('snack', 4000, 4, 15),
     ],

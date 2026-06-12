@@ -47,6 +47,14 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
 
   const maxCat = Math.max(...Object.values(report.byCategory), 1);
 
+  // 메모가 있는 기록 = 유저가 직접 남긴 유혹의 순간 (해당 주차, 금액 큰 순 4개)
+  const memoRecords = useMemo(
+    () => records
+      .filter(r => weekKeyOf(r.createdAt) === report.weekKey && r.memo)
+      .sort((a, b) => b.amount - a.amount).slice(0, 4),
+    [records, report.weekKey],
+  );
+
   const share = async () => {
     const totalAll = records.reduce((a, r) => a + r.amount, 0);
     const text = [
@@ -137,6 +145,20 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
         <p style={sub}>{report.recordCount}번 참았어요 · {report.activeDays}일 기록</p>
       </div>
 
+      {memoRecords.length > 0 && (
+        <div style={card}>
+          <p style={cardTitle}>버텨낸 순간들</p>
+          {memoRecords.map(r => {
+            const c = CATEGORIES.find(x => x.id === r.category)!;
+            return (
+              <p key={r.id} style={memoLine}>
+                {c.emoji} {r.amount.toLocaleString()}원 · “{r.memo}”
+              </p>
+            );
+          })}
+        </div>
+      )}
+
       {report.recordCount > 0 && (
         <div style={card}>
           <p style={cardTitle}>카테고리별</p>
@@ -219,6 +241,9 @@ const barAmt: CSSProperties = { width: 64, fontSize: 12, color: C.sub, textAlign
 const lockCard: CSSProperties = {
   background: C.dark, borderRadius: 20, padding: 20, border: 'none', textAlign: 'left',
   cursor: 'pointer', fontFamily: 'inherit',
+};
+const memoLine: CSSProperties = {
+  fontSize: 14, color: '#333D4B', margin: '8px 0 0', lineHeight: 1.5,
 };
 const weekNav: CSSProperties = {
   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18,

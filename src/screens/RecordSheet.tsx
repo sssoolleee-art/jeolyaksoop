@@ -45,6 +45,11 @@ export default function RecordSheet({ visible, onClose, onSaved }: Props) {
       ) : (
         <>
           <p style={title}>{selected.emoji} {selected.label}, 얼마짜리였어요?</p>
+          <input
+            style={{ ...input, marginBottom: 12, width: '100%', boxSizing: 'border-box' }}
+            placeholder="어떤 유혹이었나요? (선택 — 리포트에 남아요)" maxLength={40}
+            value={memo} onChange={e => setMemo(e.target.value)}
+          />
           <div style={presets}>
             {selected.presets.map(p => (
               <button key={p} style={preset} onClick={() => save(p)}>
@@ -59,11 +64,6 @@ export default function RecordSheet({ visible, onClose, onSaved }: Props) {
             />
             <button style={saveBtn} onClick={() => save(parseInt(custom, 10) || 0)}>저장</button>
           </div>
-          <input
-            style={{ ...input, marginTop: 8, width: '100%', boxSizing: 'border-box' }}
-            placeholder="한 줄 메모 (선택)" maxLength={40}
-            value={memo} onChange={e => setMemo(e.target.value)}
-          />
           <button style={back} onClick={() => setCat(null)}>카테고리 다시 선택</button>
         </>
       )}
