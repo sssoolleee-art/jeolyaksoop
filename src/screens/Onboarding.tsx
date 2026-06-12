@@ -107,7 +107,7 @@ const goalCard: CSSProperties = {
   background: C.card, border: '1.5px solid transparent', borderRadius: 16, padding: '16px 18px',
   textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit', color: C.text,
 };
-const goalCardActive: CSSProperties = { borderColor: C.blue, background: C.blueSoft, color: C.blue };
+const goalCardActive: CSSProperties = { borderColor: C.green, background: C.greenSoft, color: C.green };
 const notifRow: CSSProperties = {
   display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, width: '100%',
   background: C.card, border: 'none', borderRadius: 16, padding: '16px 18px', marginTop: 24,

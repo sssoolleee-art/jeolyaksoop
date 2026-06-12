@@ -7,15 +7,15 @@ def font(size, weight='bold'):
     idx = {'regular': 0, 'medium': 2, 'semibold': 4, 'bold': 6}[weight]
     return ImageFont.truetype(FONT, size, index=idx)
 
-GREEN, GREEN_D, GREEN_BG = '#00A05E', '#007A47', '#E5F6EE'
+GREEN, GREEN_D, GREEN_BG = '#0E9A63', '#0A7A4E', '#E7F6EF'
 TEXT, SUB = '#191F28', '#56616E'
 
 def draw_tree(d, cx, cy, scale):
     s = scale
     d.rounded_rectangle([cx-0.04*s, cy+0.05*s, cx+0.04*s, cy+0.32*s], radius=int(0.03*s), fill='#8B5E3C')
-    d.ellipse([cx-0.28*s, cy-0.22*s, cx+0.08*s, cy+0.12*s], fill='#00A05E')
-    d.ellipse([cx-0.08*s, cy-0.22*s, cx+0.28*s, cy+0.12*s], fill='#00B368')
-    d.ellipse([cx-0.20*s, cy-0.34*s, cx+0.20*s, cy+0.02*s], fill='#00C16E')
+    d.ellipse([cx-0.28*s, cy-0.22*s, cx+0.08*s, cy+0.12*s], fill='#0E9A63')
+    d.ellipse([cx-0.08*s, cy-0.22*s, cx+0.28*s, cy+0.12*s], fill='#16AE74')
+    d.ellipse([cx-0.20*s, cy-0.34*s, cx+0.20*s, cy+0.02*s], fill='#1FC384')
     d.ellipse([cx+0.10*s, cy+0.10*s, cx+0.30*s, cy+0.30*s], fill='#FFC83D', outline='#E8A800', width=max(2, int(0.015*s)))
     d.text((cx+0.20*s, cy+0.20*s), '₩', font=font(int(0.13*s)), fill='#9A7100', anchor='mm')
 

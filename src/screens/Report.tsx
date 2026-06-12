@@ -6,7 +6,7 @@ import { aggregateWeek, weekKeyOf } from '../engine/aggregate';
 import { CATEGORIES } from '../constants/categories';
 import { MONETIZATION_READY } from '../constants/products';
 import { track } from '../sdk/analytics';
-import { shareText } from '../sdk/share';
+import { haptic, shareText } from '../sdk/share';
 import { maybeRequestReview } from '../sdk/review';
 import { C, Toast, card } from './ui';
 
@@ -46,6 +46,32 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
   const weekLabel = `${mondayOf(offset).getMonth() + 1}월 ${mondayOf(offset).getDate()}일 주`;
 
   const maxCat = Math.max(...Object.values(report.byCategory), 1);
+
+  // 이번 주 미션 = 지난주 리포트가 제안한 목표. 달성하면 물방울 보너스 (위클리 루프 완성)
+  const grantWater = useAppStore(s => s.grantWater);
+  const [missionClaimed, setMissionClaimed] = useState(false);
+  const mission = useMemo(() => {
+    if (!(isPremium || Date.now() - installedAt < 14 * 86400000)) return null;  // 미션은 구독/체험 영역
+    const lastKey = weekKeyOf(Date.now() - 7 * 86400000);
+    if (aggregateWeek(records, lastKey).recordCount === 0) return null;
+    return buildWeeklyReport({
+      records, weekKey: lastKey, weeklyGoalKrw, isPremium: true, isFirstWeek: true,
+    }).nextMission;
+  }, [records, weeklyGoalKrw, isPremium, installedAt]);
+  const thisWeekKey = weekKeyOf(Date.now());
+  const missionDone = mission !== null && report.live && report.totalSaved >= mission.targetAmount;
+  const claimKey = `mission_claimed_${thisWeekKey}`;
+  const alreadyClaimed = missionClaimed || Boolean(localStorage.getItem(claimKey));
+
+  const claimMission = () => {
+    if (alreadyClaimed) return;
+    localStorage.setItem(claimKey, '1');
+    setMissionClaimed(true);
+    grantWater(5);
+    haptic('success');
+    setToast('미션 달성! 물방울 +5');
+    setTimeout(() => setToast(null), 2500);
+  };
 
   // 메모가 있는 기록 = 유저가 직접 남긴 유혹의 순간 (해당 주차, 금액 큰 순 4개)
   const memoRecords = useMemo(
@@ -116,6 +142,25 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
       <p style={{ fontSize: 13, color: C.sub, margin: 0, textAlign: 'center' }}>
         {report.live ? '아직 집계 중이에요. 일요일 밤에 완성돼요.' : '주간 결산 리포트예요.'}
       </p>
+
+      {report.live && mission && (
+        <div style={card}>
+          <p style={cardTitle}>이번 주 미션</p>
+          <p style={{ fontSize: 15, fontWeight: 600, color: C.text, margin: 0 }}>{mission.title}</p>
+          <div style={missionTrack}>
+            <div style={{ ...missionFill, width: `${Math.min(report.totalSaved / mission.targetAmount, 1) * 100}%` }} />
+          </div>
+          <p style={{ fontSize: 13, color: C.sub, margin: '6px 0 0' }}>
+            {report.totalSaved.toLocaleString()} / {mission.targetAmount.toLocaleString()}원
+          </p>
+          {missionDone && !alreadyClaimed && (
+            <button style={claimBtn} onClick={claimMission}>🎉 달성! 물방울 +5 받기</button>
+          )}
+          {missionDone && alreadyClaimed && (
+            <p style={{ fontSize: 13, color: C.green, fontWeight: 700, margin: '8px 0 0' }}>✓ 이번 주 미션 완료</p>
+          )}
+        </div>
+      )}
 
       {report.recordCount === 0 ? (
         <div style={{ ...card, textAlign: 'center', padding: '36px 20px' }}>
@@ -246,6 +291,17 @@ const lockCard: CSSProperties = {
 const personaCard: CSSProperties = {
   background: 'linear-gradient(150deg, #EAF4FF 0%, #FFFFFF 55%)',
   borderRadius: 20, padding: 20,
+};
+const missionTrack: CSSProperties = {
+  height: 8, background: C.bg, borderRadius: 4, marginTop: 12, overflow: 'hidden',
+};
+const missionFill: CSSProperties = {
+  height: 8, background: C.green, borderRadius: 4, transition: 'width .4s',
+};
+const claimBtn: CSSProperties = {
+  marginTop: 12, width: '100%', background: C.green, color: '#FFF', border: 'none',
+  borderRadius: 12, padding: '12px 0', fontSize: 14, fontWeight: 700, cursor: 'pointer',
+  fontFamily: 'inherit',
 };
 const memoLine: CSSProperties = {
   fontSize: 14, color: '#333D4B', margin: '8px 0 0', lineHeight: 1.5,

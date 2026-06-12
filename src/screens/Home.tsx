@@ -23,6 +23,7 @@ export default function Home({ onOpenSettings, onGoShop }: {
   const tree = trees[0];
   const stage = stageOf(tree.water);
   const theme = themeOf(tree.themeId);
+  const nextStage = GROWTH.stages.find(s => s.at > tree.water);
   const totalSaved = records.reduce((a, r) => a + r.amount, 0);
   const progress = Math.min(tree.water / GROWTH.completeAt, 1);
   const remainWater = GROWTH.completeAt - tree.water;
@@ -85,8 +86,14 @@ export default function Home({ onOpenSettings, onGoShop }: {
       <div style={treeArea}>
         <div style={treeStand}>
           <div style={ground} />
-          <span style={{ position: 'relative', fontSize: 96, lineHeight: 1, transition: 'transform .3s', transform: `scale(${0.8 + progress * 0.4})` }}>
-            {theme.stageEmoji[stage.key]}
+          <span style={{ position: 'relative', display: 'inline-block', transition: 'transform .3s', transform: `scale(${0.8 + progress * 0.4})` }}>
+            {/* key=water: 물 줄 때마다 리마운트 → waterPop 반응 후 breathe 루프 */}
+            <span key={tree.water} style={{
+              display: 'inline-block', fontSize: 96, lineHeight: 1,
+              animation: 'waterPop .5s ease-out, breathe 3.6s ease-in-out .5s infinite',
+            }}>
+              {theme.stageEmoji[stage.key]}
+            </span>
           </span>
         </div>
         <p style={{ fontSize: 16, color: '#333D4B', fontWeight: 600, margin: '10px 0 0' }}>
@@ -94,11 +101,18 @@ export default function Home({ onOpenSettings, onGoShop }: {
         </p>
         <div style={barBg}>
           <div style={{ ...barFill, width: `${progress * 100}%` }} />
+          {/* 성장 단계 눈금 (새싹 10 · 묘목 30 · 큰나무 70) */}
+          {GROWTH.stages.filter(s => s.at > 0 && s.at < GROWTH.completeAt).map(s => (
+            <span key={s.key} style={{ ...tick, left: `${(s.at / GROWTH.completeAt) * 100}%` }} />
+          ))}
         </div>
-        <p style={{ fontSize: 13, color: C.sub, margin: '6px 0 0' }}>
+        <p style={{ fontSize: 13, color: C.sub, margin: '8px 0 0' }}>
           💧 {tree.water} / {GROWTH.completeAt}
-          <span style={{ color: C.sub2 }}> · 참은 돈 1,000원 = 💧1</span>
+          {nextStage && (
+            <span style={{ color: C.green, fontWeight: 700 }}> · {nextStage.label}까지 💧{nextStage.at - tree.water}</span>
+          )}
         </p>
+        <p style={{ fontSize: 12, color: C.sub2, margin: '3px 0 0' }}>참은 돈 1,000원 = 💧1</p>
 
         {/* 완성 직전 비료 안내 (잔여 수치 정직 표기 — 다크패턴 아님) */}
         {MONETIZATION_READY && remainWater > 0 && remainWater <= 10 && fertilizers === 0 && (
@@ -247,9 +261,16 @@ const bloomHalo: CSSProperties = {
   display: 'flex', alignItems: 'center', justifyContent: 'center',
 };
 const barBg: CSSProperties = {
-  width: '70%', height: 8, background: C.line, borderRadius: 4, marginTop: 12, overflow: 'hidden',
+  position: 'relative', width: '70%', height: 10, background: C.line, borderRadius: 5,
+  marginTop: 12, overflow: 'hidden',
 };
-const barFill: CSSProperties = { height: 8, background: C.blue, borderRadius: 4, transition: 'width .4s' };
+const barFill: CSSProperties = {
+  height: 10, background: 'linear-gradient(90deg, #54CBE8, #1FA9D6)', borderRadius: 5,
+  transition: 'width .4s',
+};
+const tick: CSSProperties = {
+  position: 'absolute', top: 0, width: 2, height: 10, background: '#FFFFFF', opacity: 0.9,
+};
 const subBtn: CSSProperties = {
   background: 'none', border: 'none', color: C.green, fontSize: 15, fontWeight: 600,
   padding: '14px 0 0', cursor: 'pointer', fontFamily: 'inherit',
@@ -265,5 +286,5 @@ const fertBtn: CSSProperties = {
 const guideCard: CSSProperties = {
   background: C.greenSoft, borderRadius: 16, padding: '14px 16px', marginBottom: 12,
 };
-const guideTitle: CSSProperties = { fontSize: 14, fontWeight: 700, color: '#1B6B45', margin: '0 0 8px' };
-const guideLine: CSSProperties = { fontSize: 13, color: '#2F5C44', margin: '4px 0 0', lineHeight: 1.5 };
+const guideTitle: CSSProperties = { fontSize: 14, fontWeight: 700, color: '#0B6B45', margin: '0 0 8px' };
+const guideLine: CSSProperties = { fontSize: 13, color: '#33604B', margin: '4px 0 0', lineHeight: 1.5 };

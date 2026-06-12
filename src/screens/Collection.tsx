@@ -158,7 +158,7 @@ const themeChip: CSSProperties = {
   background: C.bg, border: '1px solid transparent', borderRadius: 20, padding: '8px 14px',
   fontSize: 13, fontWeight: 600, color: C.text, cursor: 'pointer', fontFamily: 'inherit',
 };
-const themeChipActive: CSSProperties = { background: C.blueSoft, borderColor: C.blue, color: C.blue };
+const themeChipActive: CSSProperties = { background: C.greenSoft, borderColor: C.green, color: C.green };
 const inviteCard: CSSProperties = {
   background: '#FFF8E7', border: 'none', borderRadius: 20, padding: 20, textAlign: 'left',
   cursor: 'pointer', fontFamily: 'inherit',

@@ -11,8 +11,8 @@ export const C = {
   line: '#E5E8EB',
   blue: '#3182F6',
   blueSoft: '#E8F3FF',
-  green: '#00A05E',
-  greenSoft: '#E5F6EE',
+  green: '#0E9A63',
+  greenSoft: '#E7F6EF',
   orange: '#FF6B00',
   dark: '#191F28',
 };

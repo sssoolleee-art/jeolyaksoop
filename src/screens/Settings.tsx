@@ -93,7 +93,7 @@ function ToggleRow({ label, value, onChange }: {
   return (
     <button style={toggleRow} onClick={() => onChange(!value)}>
       <span style={{ fontSize: 14, color: C.text }}>{label}</span>
-      <span style={{ ...knobTrack, background: value ? C.blue : C.line }}>
+      <span style={{ ...knobTrack, background: value ? C.green : C.line }}>
         <span style={{ ...knob, transform: value ? 'translateX(16px)' : 'none' }} />
       </span>
     </button>
@@ -109,7 +109,7 @@ const goalChip: CSSProperties = {
   flex: 1, background: C.bg, border: '1px solid transparent', borderRadius: 12,
   padding: '10px 0', fontSize: 14, fontWeight: 600, color: C.text, cursor: 'pointer', fontFamily: 'inherit',
 };
-const goalChipActive: CSSProperties = { background: C.blueSoft, borderColor: C.blue, color: C.blue };
+const goalChipActive: CSSProperties = { background: C.greenSoft, borderColor: C.green, color: C.green };
 const toggleRow: CSSProperties = {
   display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%',
   background: 'none', border: 'none', padding: '10px 0', cursor: 'pointer', fontFamily: 'inherit',

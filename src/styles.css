@@ -26,3 +26,17 @@ button { touch-action: manipulation; }
   0% { transform: translateY(0) rotate(0deg); opacity: 1; }
   100% { transform: translateY(300px) rotate(300deg); opacity: 0; }
 }
+
+/* 홈 나무: 상시 숨쉬기 (살아있는 느낌) */
+@keyframes breathe {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-4px) rotate(1.5deg); }
+}
+
+/* 물방울을 받을 때 나무가 반응 */
+@keyframes waterPop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.12) rotate(-3deg); }
+  70% { transform: scale(0.97) rotate(2deg); }
+  100% { transform: scale(1); }
+}
