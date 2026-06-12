@@ -1,7 +1,6 @@
 import { CSSProperties, useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
-import { tossLogin } from '../sdk/auth';
-import { C, Toast, btn } from './ui';
+import { C, btn } from './ui';
 
 const SLIDES = [
   { emoji: '✋', title: '참았다면, 기록하세요', body: '커피 한 잔, 배달 한 번.\n참은 소비를 2탭으로 기록해요.' },
@@ -17,23 +16,9 @@ const GOALS = [
 
 export default function Onboarding() {
   const completeOnboarding = useAppStore(s => s.completeOnboarding);
-  const [step, setStep] = useState(0);             // 0~2 슬라이드, 3 로그인, 4 목표+알림
+  const [step, setStep] = useState(0);             // 0~2 슬라이드, 3 목표+알림
   const [goal, setGoal] = useState(50000);
   const [notifOk, setNotifOk] = useState(true);
-  const [busy, setBusy] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
-
-  const login = async () => {
-    if (busy) return;
-    setBusy(true);
-    const ok = await tossLogin();
-    setBusy(false);
-    if (ok) setStep(4);
-    else {
-      setToast('로그인에 실패했어요. 다시 시도해주세요.');
-      setTimeout(() => setToast(null), 2200);
-    }
-  };
 
   const finish = () => {
     completeOnboarding(goal, { weeklyReport: notifOk, treeDone: notifOk });
@@ -59,22 +44,6 @@ export default function Onboarding() {
         {step < 2 && (
           <button style={skip} onClick={() => setStep(3)}>건너뛰기</button>
         )}
-      </div>
-    );
-  }
-
-  if (step === 3) {
-    return (
-      <div style={wrap}>
-        <div style={center}>
-          <span style={{ fontSize: 72 }}>🌳</span>
-          <p style={title}>절약숲</p>
-          <p style={body}>토스로 간편하게 시작해요</p>
-        </div>
-        <button style={btn(C.blue)} onClick={login} disabled={busy}>
-          {busy ? '로그인 중…' : '토스로 시작하기'}
-        </button>
-        <Toast message={toast} />
       </div>
     );
   }

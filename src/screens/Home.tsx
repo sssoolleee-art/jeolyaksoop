@@ -1,5 +1,6 @@
 import { CSSProperties, useState } from 'react';
 import { useAppStore, rewardedAdRemaining } from '../store/useAppStore';
+import { MONETIZATION_READY } from '../constants/products';
 import { stageOf, themeOf, GROWTH } from '../constants/growth';
 import { showRewarded } from '../sdk/ads';
 import RecordSheet from './RecordSheet';
@@ -83,7 +84,7 @@ export default function Home({ onOpenSettings, onGoShop }: {
         </p>
 
         {/* 완성 직전 비료 안내 (잔여 수치 정직 표기 — 다크패턴 아님) */}
-        {remainWater > 0 && remainWater <= 10 && fertilizers === 0 && (
+        {MONETIZATION_READY && remainWater > 0 && remainWater <= 10 && fertilizers === 0 && (
           <button style={shopHint} onClick={onGoShop}>
             물방울 {remainWater}개만 더 모으면 완성 — 상점에서 비료 보기
           </button>
@@ -97,12 +98,14 @@ export default function Home({ onOpenSettings, onGoShop }: {
 
       <button style={btn(C.blue)} onClick={() => setSheetOpen(true)}>참았어요 ✋</button>
       <button style={subBtn} onClick={onCheckin}>오늘 무지출 체크인</button>
-      <button
-        style={{ ...subBtn, color: adsLeft > 0 ? C.green : C.sub2 }}
-        onClick={onRewardedAd} disabled={adsLeft <= 0 || adBusy}
-      >
-        {adBusy ? '광고 불러오는 중…' : `광고 보고 물방울 ${GROWTH.rewardedAdWater}개 받기 (오늘 ${adsLeft}회 남음)`}
-      </button>
+      {MONETIZATION_READY && (
+        <button
+          style={{ ...subBtn, color: adsLeft > 0 ? C.green : C.sub2 }}
+          onClick={onRewardedAd} disabled={adsLeft <= 0 || adBusy}
+        >
+          {adBusy ? '광고 불러오는 중…' : `광고 보고 물방울 ${GROWTH.rewardedAdWater}개 받기 (오늘 ${adsLeft}회 남음)`}
+        </button>
+      )}
 
       <Toast message={toast} />
       <RecordSheet

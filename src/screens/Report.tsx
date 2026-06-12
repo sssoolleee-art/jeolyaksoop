@@ -3,6 +3,7 @@ import { useAppStore } from '../store/useAppStore';
 import { buildWeeklyReport } from '../engine/report';
 import { aggregateWeek, weekKeyOf } from '../engine/aggregate';
 import { CATEGORIES } from '../constants/categories';
+import { MONETIZATION_READY } from '../constants/products';
 import { track } from '../sdk/analytics';
 import { copyReportCard } from '../sdk/share';
 import { maybeRequestReview } from '../sdk/review';
@@ -91,7 +92,7 @@ export default function Report({ onGoShop }: { onGoShop: () => void }) {
         </div>
       )}
 
-      {report.premiumLocked ? (
+      {report.premiumLocked && MONETIZATION_READY ? (
         <button style={lockCard} onClick={onGoShop}>
           <span style={{ color: '#FFF', fontSize: 15, fontWeight: 700 }}>
             🔒 위험 시간대 분석 · 다음 주 미션 · 월간 추세

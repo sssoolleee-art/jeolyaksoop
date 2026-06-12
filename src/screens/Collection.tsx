@@ -1,6 +1,7 @@
 import { CSSProperties } from 'react';
 import { useAppStore } from '../store/useAppStore';
 import { THEMES, themeOf } from '../constants/growth';
+import { MONETIZATION_READY } from '../constants/products';
 import { BannerAd } from '../sdk/ads';
 import { inviteFriend } from '../sdk/share';
 import { C, card } from './ui';
@@ -63,15 +64,17 @@ export default function Collection() {
         </div>
       )}
 
-      <button style={inviteCard} onClick={inviteFriend}>
-        <span style={{ fontSize: 15, fontWeight: 700, color: C.text }}>👋 친구 초대하고 비료 받기</span>
-        <span style={{ fontSize: 13, color: C.sub, display: 'block', marginTop: 4 }}>
-          초대가 성공하면 두 사람 모두 비료 1개
-        </span>
-      </button>
+      {MONETIZATION_READY && (
+        <button style={inviteCard} onClick={inviteFriend}>
+          <span style={{ fontSize: 15, fontWeight: 700, color: C.text }}>👋 친구 초대하고 비료 받기</span>
+          <span style={{ fontSize: 13, color: C.sub, display: 'block', marginTop: 4 }}>
+            초대가 성공하면 두 사람 모두 비료 1개
+          </span>
+        </button>
+      )}
 
       <div style={{ flex: 1 }} />
-      {!adsRemoved && <BannerAd />}
+      {MONETIZATION_READY && !adsRemoved && <BannerAd />}
     </div>
   );
 }

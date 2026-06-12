@@ -1,5 +1,6 @@
 import { CSSProperties, useEffect, useState } from 'react';
 import { useAppStore } from './store/useAppStore';
+import { MONETIZATION_READY } from './constants/products';
 import { restorePendingOrders, restoreNonConsumables, refreshSubscription } from './sdk/iap';
 import Onboarding from './screens/Onboarding';
 import Home from './screens/Home';
@@ -15,7 +16,7 @@ const TABS: { id: Tab; label: string; emoji: string }[] = [
   { id: 'home',       label: '숲',     emoji: '🌳' },
   { id: 'report',     label: '리포트', emoji: '📊' },
   { id: 'collection', label: '도감',   emoji: '📖' },
-  { id: 'shop',       label: '상점',   emoji: '🛒' },
+  ...(MONETIZATION_READY ? [{ id: 'shop' as Tab, label: '상점', emoji: '🛒' }] : []),
 ];
 
 export default function App() {
