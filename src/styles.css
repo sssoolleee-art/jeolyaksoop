@@ -1,0 +1,12 @@
+* { margin: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  background: #F2F4F6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard',
+    'Noto Sans KR', sans-serif;
+  color: #191F28;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+button { touch-action: manipulation; }
