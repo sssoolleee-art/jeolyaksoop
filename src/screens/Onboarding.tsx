@@ -38,7 +38,7 @@ export default function Onboarding() {
         </div>
         <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginBottom: 20 }}>
           {SLIDES.map((_, i) => (
-            <span key={i} style={{ ...dot, background: i === step ? C.blue : C.line }} />
+            <span key={i} style={{ ...dot, background: i === step ? C.green : C.line }} />
           ))}
         </div>
         <Button display="block" size="xlarge" onClick={() => setStep(step + 1)}>
