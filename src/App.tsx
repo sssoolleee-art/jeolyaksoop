@@ -20,7 +20,10 @@ const TABS: { id: Tab; label: string; emoji: string }[] = [
 
 export default function App() {
   const onboarded = useAppStore(s => s.onboarded);
-  const [tab, setTab] = useState<Tab>('home');
+  const [tab, setTab] = useState<Tab>(() => {
+    const t = new URLSearchParams(location.search).get('tab');
+    return (TABS.some(x => x.id === t) ? t : 'home') as Tab;
+  });
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   // 앱 시작: 미지급 주문 복구 → 비소모성 복원 → 구독 상태 동기화 (기획서 4장)
