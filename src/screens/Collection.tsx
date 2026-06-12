@@ -8,12 +8,25 @@ import { BannerAd } from '../sdk/ads';
 import { inviteFriend } from '../sdk/share';
 import { C, Sheet, card } from './ui';
 
+// 숲 칭호: 나무 수가 늘수록 숲이 자란다 — 다음 칭호가 수집 동기
+const FOREST_RANKS = [
+  { min: 0,  title: '빈 들판' },
+  { min: 1,  title: '새내기 뜰' },
+  { min: 3,  title: '오솔길 숲' },
+  { min: 6,  title: '우거진 숲' },
+  { min: 10, title: '울창한 숲' },
+  { min: 20, title: '전설의 숲' },
+];
+
 export default function Collection() {
   const { trees, adsRemoved, ownedThemes, isPremium, setTheme } = useAppStore();
   const [selected, setSelected] = useState<Tree | null>(null);
   const done = [...trees.filter(t => t.completedAt)].sort((a, b) => a.completedAt! - b.completedAt!);
   const current = trees[0];
   const totalSaved = done.reduce((a, t) => a + t.savedAmount, 0);
+  const rank = [...FOREST_RANKS].reverse().find(r => done.length >= r.min)!;
+  const nextRank = FOREST_RANKS.find(r => r.min > done.length);
+  const emptyPlots = nextRank ? Math.min(nextRank.min - done.length, 3) : 0;
 
   // 완성 나무들 + 자라는 중인 나무를 한 땅에 심는다
   const planted: { tree: Tree; growing: boolean }[] = [
@@ -30,6 +43,7 @@ export default function Collection() {
       <div style={forest}>
         <span style={{ position: 'absolute', top: 18, left: 24, fontSize: 24, opacity: 0.85 }}>☁️</span>
         <span style={{ position: 'absolute', top: 38, right: 36, fontSize: 16, opacity: 0.55 }}>☁️</span>
+        <span style={rankPill}>{rank.title}</span>
         <div style={forestGround} />
         <div style={treeField}>
           {planted.map(({ tree, growing }, i) => {
@@ -52,12 +66,21 @@ export default function Collection() {
               </button>
             );
           })}
+          {/* 빈 터: 채우고 싶은 자리를 보여준다 */}
+          {Array.from({ length: emptyPlots }).map((_, i) => (
+            <span key={`plot-${i}`} style={plot}>+</span>
+          ))}
         </div>
         <p style={forestCaption}>
           {done.length === 0
             ? '첫 나무가 만개하면 이 숲에 영원히 심어져요'
             : `나무 ${done.length}그루가 ${totalSaved.toLocaleString()}원을 지켰어요`}
         </p>
+        {nextRank && (
+          <p style={nextRankCaption}>
+            {nextRank.min - done.length}그루 더 심으면 ‘{nextRank.title}’이 돼요
+          </p>
+        )}
       </div>
 
       <div style={card}>
@@ -152,6 +175,21 @@ const growingBadge: CSSProperties = {
 const forestCaption: CSSProperties = {
   position: 'relative', textAlign: 'center', fontSize: 13, fontWeight: 600,
   color: '#33604B', margin: '16px 0 0',
+};
+const nextRankCaption: CSSProperties = {
+  position: 'relative', textAlign: 'center', fontSize: 12, fontWeight: 600,
+  color: '#5E8A74', margin: '4px 0 0',
+};
+const rankPill: CSSProperties = {
+  position: 'absolute', top: 14, left: '50%', transform: 'translateX(-50%)',
+  background: 'rgba(255,255,255,0.75)', color: '#0F6C47', fontSize: 13, fontWeight: 800,
+  borderRadius: 14, padding: '5px 14px', backdropFilter: 'blur(2px)',
+};
+const plot: CSSProperties = {
+  width: 34, height: 34, borderRadius: 17, border: '2px dashed rgba(15,108,71,0.30)',
+  color: 'rgba(15,108,71,0.40)', fontSize: 18, fontWeight: 700,
+  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+  marginLeft: 8, marginBottom: 4,
 };
 const themeChip: CSSProperties = {
   background: C.bg, border: '1px solid transparent', borderRadius: 20, padding: '8px 14px',

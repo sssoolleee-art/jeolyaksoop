@@ -118,7 +118,7 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
           <p style={personaTitle}>새벽 배달 유혹 파이터</p>
           <p style={personaComment}>밤 11시의 치킨을 이긴 사람은 뭐든 이길 수 있어요.</p>
           <div style={{ display: 'flex', alignItems: 'flex-end', marginTop: 12 }}>
-            <span style={{ fontSize: 36, fontWeight: 800, color: C.blue, lineHeight: 1 }}>76</span>
+            <span style={{ fontSize: 36, fontWeight: 800, color: C.green, lineHeight: 1 }}>76</span>
             <span style={{ fontSize: 15, color: C.sub, marginLeft: 2 }}>점</span>
           </div>
         </div>
@@ -182,7 +182,7 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
       <div style={card}>
         <p style={cardTitle}>절제력 점수</p>
         <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-          <span style={{ fontSize: 44, fontWeight: 800, color: C.blue, lineHeight: 1 }}>{report.score}</span>
+          <span style={{ fontSize: 44, fontWeight: 800, color: C.green, lineHeight: 1 }}>{report.score}</span>
           <span style={{ fontSize: 16, color: C.sub, marginLeft: 2 }}>/ 100점</span>
         </div>
         <p style={{ fontSize: 13, color: C.sub2, margin: '8px 0 0' }}>
@@ -195,9 +195,6 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
         <p style={cardTitle}>{report.live ? '이번 주 지킨 돈' : '지난주 지킨 돈'}</p>
         <p style={bigNumber}>{report.totalSaved.toLocaleString()}원</p>
         <p style={sub}>{report.recordCount}번 참았어요 · {report.activeDays}일 기록</p>
-        <div style={goalTrack}>
-          <div style={{ ...goalFill, width: `${Math.min(report.totalSaved / weeklyGoalKrw, 1) * 100}%` }} />
-        </div>
         <p style={sub}>
           주간 목표 {weeklyGoalKrw.toLocaleString()}원의{' '}
           <b style={{ color: report.totalSaved >= weeklyGoalKrw ? C.green : C.text }}>
@@ -298,21 +295,15 @@ const sub: CSSProperties = { fontSize: 13, color: C.sub, margin: '4px 0 0' };
 const barRow: CSSProperties = { display: 'flex', alignItems: 'center', gap: 8, margin: '6px 0' };
 const barLabel: CSSProperties = { width: 76, fontSize: 13, color: '#333D4B', flexShrink: 0 };
 const barTrack: CSSProperties = { flex: 1, height: 8, background: C.bg, borderRadius: 4 };
-const barFill: CSSProperties = { height: 8, background: C.blue, borderRadius: 4 };
+const barFill: CSSProperties = { height: 8, background: C.green, borderRadius: 4 };
 const barAmt: CSSProperties = { width: 64, fontSize: 12, color: C.sub, textAlign: 'right', flexShrink: 0 };
 const lockCard: CSSProperties = {
   background: C.dark, borderRadius: 20, padding: 20, border: 'none', textAlign: 'left',
   cursor: 'pointer', fontFamily: 'inherit',
 };
 const personaCard: CSSProperties = {
-  background: 'linear-gradient(150deg, #EAF4FF 0%, #FFFFFF 55%)',
+  background: 'linear-gradient(150deg, #EAF5F0 0%, #FFFFFF 55%)',
   borderRadius: 20, padding: 20,
-};
-const goalTrack: CSSProperties = {
-  height: 6, background: C.bg, borderRadius: 3, marginTop: 12, overflow: 'hidden',
-};
-const goalFill: CSSProperties = {
-  height: 6, background: C.green, borderRadius: 3, transition: 'width .4s',
 };
 const missionTrack: CSSProperties = {
   height: 8, background: C.bg, borderRadius: 4, marginTop: 12, overflow: 'hidden',
@@ -336,7 +327,7 @@ const navBtn: CSSProperties = {
   fontSize: 18, color: C.text, cursor: 'pointer', fontFamily: 'inherit', lineHeight: 1,
 };
 const shareBtn: CSSProperties = {
-  marginTop: 16, width: '100%', background: C.blueSoft, color: C.blue, border: 'none',
+  marginTop: 16, width: '100%', background: C.greenSoft, color: C.green, border: 'none',
   borderRadius: 12, padding: '12px 0', fontSize: 14, fontWeight: 700, cursor: 'pointer',
   fontFamily: 'inherit',
 };
