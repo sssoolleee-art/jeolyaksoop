@@ -161,7 +161,8 @@ export const useAppStore = create<AppState>((set, get) => {
     },
 
     setTheme(themeId) {
-      if (!get().ownedThemes.includes(themeId)) return;
+      // 프리미엄은 전체 테마 사용 가능 (상품 설명과 일치)
+      if (!get().ownedThemes.includes(themeId) && !get().isPremium) return;
       const trees = [...get().trees];
       trees[0] = { ...trees[0], themeId };
       set({ trees });

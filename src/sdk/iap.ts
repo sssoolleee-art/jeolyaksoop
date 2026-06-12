@@ -1,5 +1,6 @@
 import { IAP } from '@apps-in-toss/web-framework';
 import { PRODUCTS, productById } from '../constants/products';
+import { THEME_PACKS } from '../constants/growth';
 import { useAppStore } from '../store/useAppStore';
 import { track } from './analytics';
 
@@ -11,7 +12,7 @@ export function grant(productId: string) {
   if (productId === 'fert_s') s.addFertilizers(1);
   if (productId === 'fert_m') s.addFertilizers(5);
   if (productId === 'remove_ads') s.setAdsRemoved(true);
-  if (productId === 'tree_pack_season') ['season1a', 'season1b', 'season1c'].forEach(id => s.addTheme(id));
+  THEME_PACKS[productId]?.forEach(id => s.addTheme(id));
   if (productId.startsWith('premium')) { s.setPremium(true); s.setAdsRemoved(true); }
   track(`purchase_${productId}`);
 }
@@ -100,8 +101,9 @@ export async function restoreNonConsumables(): Promise<void> {
     for (const order of res.orders) {
       if (order.status !== 'COMPLETED') continue;
       const id = productIdBySku(order.sku);
+      if (!id) continue;
       if (id === 'remove_ads' && !s.adsRemoved) s.setAdsRemoved(true);
-      if (id === 'tree_pack_season') ['season1a', 'season1b', 'season1c'].forEach(t => s.addTheme(t));
+      THEME_PACKS[id]?.forEach(t => s.addTheme(t));
     }
   } catch { /* 미지원 환경 */ }
 }

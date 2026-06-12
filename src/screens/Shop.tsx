@@ -1,6 +1,7 @@
 import { CSSProperties, useEffect, useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
 import { PRODUCTS } from '../constants/products';
+import { THEME_PACKS } from '../constants/growth';
 import { purchase, fetchDisplayPrices } from '../sdk/iap';
 import { track } from '../sdk/analytics';
 import { Product } from '../types';
@@ -32,7 +33,7 @@ export default function Shop() {
 
   const owned = (p: Product) =>
     (p.id === 'remove_ads' && adsRemoved && !isPremium) ||
-    (p.id === 'tree_pack_season' && ownedThemes.includes('season1a')) ||
+    (THEME_PACKS[p.id]?.every(t => ownedThemes.includes(t)) ?? false) ||
     (p.type === 'subscription' && isPremium);
 
   const section = (title: string, ids: string[]) => (
@@ -66,7 +67,8 @@ export default function Shop() {
   return (
     <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
       {section('부스터', ['fert_s', 'fert_m'])}
-      {section('꾸미기', ['tree_pack_season', 'remove_ads'])}
+      {section('나무 테마', ['tree_pack_season', 'tree_pack_garden', 'tree_pack_exotic', 'tree_pack_lucky'])}
+      {section('꾸미기', ['remove_ads'])}
       {section('프리미엄', ['premium_m', 'premium_y'])}
       <p style={notice}>
         구독은 언제든 설정 &gt; 구독 관리에서 해지할 수 있어요. 해지 시 다음 결제일부터 청구되지 않아요.

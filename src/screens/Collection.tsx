@@ -9,7 +9,7 @@ import { inviteFriend } from '../sdk/share';
 import { C, Sheet, card } from './ui';
 
 export default function Collection() {
-  const { trees, adsRemoved, ownedThemes, setTheme } = useAppStore();
+  const { trees, adsRemoved, ownedThemes, isPremium, setTheme } = useAppStore();
   const [selected, setSelected] = useState<Tree | null>(null);
   const done = [...trees.filter(t => t.completedAt)].sort((a, b) => a.completedAt! - b.completedAt!);
   const current = trees[0];
@@ -62,7 +62,7 @@ export default function Collection() {
         <p style={cardTitle}>내 나무 테마</p>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {THEMES.map(t => {
-            const owned = ownedThemes.includes(t.id);
+            const owned = ownedThemes.includes(t.id) || isPremium;
             const active = current.themeId === t.id;
             return (
               <button
