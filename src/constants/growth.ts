@@ -27,8 +27,9 @@ export function waterFromAmount(amountKrw: number): number {
 }
 
 // 테마별 나무 모습 (tree_pack_season 구매 시 season 테마 해금)
+// bloom(만개)은 도감 숲에 영구히 남는 모습이므로 테마끼리 절대 겹치지 않게 유지할 것
 export const THEMES: { id: string; label: string; stageEmoji: Record<string, string> }[] = [
-  { id: 'basic',   label: '초록나무', stageEmoji: { seed: '🌰', sprout: '🌱', sapling: '🪴', tree: '🌳', bloom: '🌸' } },
+  { id: 'basic',   label: '초록나무', stageEmoji: { seed: '🌰', sprout: '🌱', sapling: '🪴', tree: '🌲', bloom: '🌳' } },
   { id: 'season1a', label: '벚나무',   stageEmoji: { seed: '🌰', sprout: '🌱', sapling: '🪴', tree: '🌳', bloom: '🌸' } },
   { id: 'season1b', label: '단풍나무', stageEmoji: { seed: '🌰', sprout: '🌱', sapling: '🪴', tree: '🌳', bloom: '🍁' } },
   { id: 'season1c', label: '솔나무',   stageEmoji: { seed: '🌰', sprout: '🌱', sapling: '🪴', tree: '🌲', bloom: '🎄' } },
