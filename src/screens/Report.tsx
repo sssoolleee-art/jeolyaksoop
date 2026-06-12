@@ -125,7 +125,7 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
         </div>
       ) : (
       <>
-      <div style={card}>
+      <div style={personaCard}>
         <p style={personaTitle}>{report.personaTitle}</p>
         <p style={personaComment}>{report.personaComment}</p>
         <div style={{ display: 'flex', alignItems: 'flex-end', marginTop: 16 }}>
@@ -241,6 +241,10 @@ const barAmt: CSSProperties = { width: 64, fontSize: 12, color: C.sub, textAlign
 const lockCard: CSSProperties = {
   background: C.dark, borderRadius: 20, padding: 20, border: 'none', textAlign: 'left',
   cursor: 'pointer', fontFamily: 'inherit',
+};
+const personaCard: CSSProperties = {
+  background: 'linear-gradient(150deg, #EAF4FF 0%, #FFFFFF 55%)',
+  borderRadius: 20, padding: 20,
 };
 const memoLine: CSSProperties = {
   fontSize: 14, color: '#333D4B', margin: '8px 0 0', lineHeight: 1.5,

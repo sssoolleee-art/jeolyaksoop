@@ -28,6 +28,9 @@ export default function Collection() {
       </div>
 
       <div style={forest}>
+        <span style={{ position: 'absolute', top: 18, left: 24, fontSize: 22, opacity: 0.8 }}>☁️</span>
+        <span style={{ position: 'absolute', top: 34, right: 36, fontSize: 16, opacity: 0.6 }}>☁️</span>
+        <span style={{ position: 'absolute', top: 14, right: 96, fontSize: 13, opacity: 0.5 }}>🐦</span>
         <div style={forestGround} />
         <div style={treeField}>
           {planted.map(({ tree, growing }, i) => {

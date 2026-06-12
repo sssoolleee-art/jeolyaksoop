@@ -30,7 +30,9 @@ export default function Onboarding() {
     return (
       <div style={wrap}>
         <div style={center}>
-          <span style={{ fontSize: 80 }}>{s.emoji}</span>
+          <div style={emojiHalo}>
+            <span style={{ fontSize: 72, lineHeight: 1 }}>{s.emoji}</span>
+          </div>
           <p style={title}>{s.title}</p>
           <p style={body}>{s.body}</p>
         </div>
@@ -92,6 +94,11 @@ const center: CSSProperties = {
 const title: CSSProperties = { fontSize: 24, fontWeight: 700, color: C.text, margin: '20px 0 0' };
 const body: CSSProperties = { fontSize: 15, color: C.sub, margin: '10px 0 0', lineHeight: 1.6, whiteSpace: 'pre-line' };
 const dot: CSSProperties = { width: 8, height: 8, borderRadius: 4, display: 'inline-block' };
+const emojiHalo: CSSProperties = {
+  width: 132, height: 132, borderRadius: 66,
+  background: 'radial-gradient(circle, #FFFFFF 0%, rgba(255,255,255,0) 78%)',
+  display: 'flex', alignItems: 'center', justifyContent: 'center',
+};
 const skip: CSSProperties = {
   background: 'none', border: 'none', color: C.sub2, fontSize: 14, padding: '14px 0 0',
   cursor: 'pointer', fontFamily: 'inherit',
