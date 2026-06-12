@@ -187,3 +187,10 @@ export function rewardedAdRemaining(s: Pick<AppState, 'rewardedAdCountToday' | '
   const used = s.rewardedAdDate === todayStr() ? s.rewardedAdCountToday : 0;
   return Math.max(GROWTH.rewardedAdDailyLimit - used, 0);
 }
+
+// 표시용 유효 스트릭: 마지막 활동이 오늘/어제가 아니면 이미 끊긴 것 (저장값은 기록 시점에 갱신됨)
+export function effectiveStreak(s: Pick<AppState, 'streak' | 'lastActiveDate'>): number {
+  if (!s.lastActiveDate) return 0;
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  return s.lastActiveDate === todayStr() || s.lastActiveDate === yesterday ? s.streak : 0;
+}

@@ -1,6 +1,6 @@
 import { CSSProperties, useState } from 'react';
 import { Button } from '@toss/tds-mobile';
-import { useAppStore, rewardedAdRemaining } from '../store/useAppStore';
+import { useAppStore, rewardedAdRemaining, effectiveStreak } from '../store/useAppStore';
 import { MONETIZATION_READY } from '../constants/products';
 import { stageOf, themeOf, GROWTH } from '../constants/growth';
 import { showRewarded } from '../sdk/ads';
@@ -11,7 +11,8 @@ export default function Home({ onOpenSettings, onGoShop }: {
   onOpenSettings: () => void; onGoShop: () => void;
 }) {
   const store = useAppStore();
-  const { trees, streak, records, fertilizers } = store;
+  const { trees, records, fertilizers } = store;
+  const streak = effectiveStreak(store);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [celebrate, setCelebrate] = useState(false);
