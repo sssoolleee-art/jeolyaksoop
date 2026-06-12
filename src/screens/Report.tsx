@@ -14,41 +14,56 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
   const { records, weeklyGoalKrw, isPremium, installedAt } = useAppStore();
   const [toast, setToast] = useState<string | null>(null);
 
-  const report = useMemo(() => {
-    track('report_open');
-    // 지난주 기록이 있으면 지난주 리포트, 없으면 이번 주 중간 리포트
+  // offset: 0 = 이번 주(집계 중), 1 = 지난주, 2 = 2주 전 …
+  const [offset, setOffset] = useState(() => {
     const lastWeekKey = weekKeyOf(Date.now() - 7 * 86400000);
-    const hasLastWeek = aggregateWeek(records, lastWeekKey).recordCount > 0;
-    const weekKey = hasLastWeek ? lastWeekKey : weekKeyOf(Date.now());
+    return aggregateWeek(useAppStore.getState().records, lastWeekKey).recordCount > 0 ? 1 : 0;
+  });
+
+  const report = useMemo(() => {
+    track('report_open', { offset });
     const installedDays = Date.now() - installedAt;
     if (installedDays >= 7 * 86400000 && installedDays < 14 * 86400000) {
       maybeRequestReview('report_week2');
     }
     return {
-      live: !hasLastWeek,
+      live: offset === 0,
       ...buildWeeklyReport({
-        records, weekKey, weeklyGoalKrw, isPremium,
+        records, weekKey: weekKeyOf(Date.now() - offset * 7 * 86400000),
+        weeklyGoalKrw, isPremium,
         isFirstWeek: installedDays < 7 * 86400000,
       }),
     };
-  }, [records, weeklyGoalKrw, isPremium, installedAt]);
+  }, [records, weeklyGoalKrw, isPremium, installedAt, offset]);
+
+  // 주차 네비게이션 범위: 가장 오래된 기록이 있는 주 ~ 이번 주
+  const mondayOf = (off: number) => {
+    const d = new Date();
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate() - ((d.getDay() + 6) % 7) - off * 7);
+  };
+  const earliest = records.length ? Math.min(...records.map(r => r.createdAt)) : Date.now();
+  const canPrev = weekKeyOf(Date.now() - (offset + 1) * 7 * 86400000) >= weekKeyOf(earliest);
+  const weekLabel = `${mondayOf(offset).getMonth() + 1}월 ${mondayOf(offset).getDate()}일 주`;
 
   const maxCat = Math.max(...Object.values(report.byCategory), 1);
 
   const share = async () => {
+    const totalAll = records.reduce((a, r) => a + r.amount, 0);
     const text = [
-      `🌳 절약숲 주간 리포트`,
-      `나의 소비 페르소나: ${report.personaTitle}`,
-      `절제력 ${report.score}점 · 이번 주 ${report.totalSaved.toLocaleString()}원 지킴`,
+      `🌳 나의 소비 페르소나: ${report.personaTitle}`,
+      `절제력 ${report.score}점 · ${report.live ? '이번 주' : '지난주'} ${report.totalSaved.toLocaleString()}원 지킴`,
       report.personaComment,
+      ``,
+      `시작한 뒤로 지금까지 ${totalAll.toLocaleString()}원을 지켰어요 💰`,
+      `토스에서 '절약숲'을 검색하면 너도 키울 수 있어 🌱`,
     ].join('\n');
     const ok = await copyReportCard(text);
-    setToast(ok ? '리포트 카드가 복사됐어요. 어디든 붙여넣어 자랑하세요!' : '복사에 실패했어요');
+    setToast(ok ? '복사 완료! 붙여넣으면 친구도 절약숲을 찾아올 수 있어요' : '복사에 실패했어요');
     setTimeout(() => setToast(null), 2500);
   };
 
   // 기록이 한 건도 없으면: 빈 리포트 대신 뭘 받게 되는지 보여준다
-  if (report.recordCount === 0) {
+  if (records.length === 0) {
     return (
       <div style={{ padding: '0 20px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{ margin: '0 -4px' }}>
@@ -82,12 +97,26 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
       <div style={{ margin: '0 -4px' }}>
         <Top title={<Top.TitleParagraph size={22}>주간 리포트</Top.TitleParagraph>} />
       </div>
-      {report.live && (
-        <p style={{ fontSize: 13, color: C.sub, margin: 0, textAlign: 'center' }}>
-          아직 집계 중이에요. 일요일 밤에 완성돼요.
-        </p>
-      )}
+      <div style={weekNav}>
+        <button style={{ ...navBtn, opacity: canPrev ? 1 : 0.3 }} disabled={!canPrev}
+          onClick={() => setOffset(offset + 1)}>‹</button>
+        <span style={{ fontSize: 15, fontWeight: 700, color: C.text }}>{weekLabel}</span>
+        <button style={{ ...navBtn, opacity: offset > 0 ? 1 : 0.3 }} disabled={offset === 0}
+          onClick={() => setOffset(offset - 1)}>›</button>
+      </div>
+      <p style={{ fontSize: 13, color: C.sub, margin: 0, textAlign: 'center' }}>
+        {report.live ? '아직 집계 중이에요. 일요일 밤에 완성돼요.' : '주간 결산 리포트예요.'}
+      </p>
 
+      {report.recordCount === 0 ? (
+        <div style={{ ...card, textAlign: 'center', padding: '36px 20px' }}>
+          <span style={{ fontSize: 40 }}>🍂</span>
+          <p style={{ fontSize: 15, fontWeight: 600, color: C.sub, margin: '10px 0 0' }}>
+            이 주에는 기록이 없어요
+          </p>
+        </div>
+      ) : (
+      <>
       <div style={card}>
         <p style={personaTitle}>{report.personaTitle}</p>
         <p style={personaComment}>{report.personaComment}</p>
@@ -103,7 +132,7 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
       </div>
 
       <div style={card}>
-        <p style={cardTitle}>이번 주 지킨 돈</p>
+        <p style={cardTitle}>{report.live ? '이번 주 지킨 돈' : '지난주 지킨 돈'}</p>
         <p style={bigNumber}>{report.totalSaved.toLocaleString()}원</p>
         <p style={sub}>{report.recordCount}번 참았어요 · {report.activeDays}일 기록</p>
       </div>
@@ -153,6 +182,8 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
           {(isPremium) && <PremiumExtras />}
         </>
       )}
+      </>
+      )}
       <Toast message={toast} />
     </div>
   );
@@ -188,6 +219,13 @@ const barAmt: CSSProperties = { width: 64, fontSize: 12, color: C.sub, textAlign
 const lockCard: CSSProperties = {
   background: C.dark, borderRadius: 20, padding: 20, border: 'none', textAlign: 'left',
   cursor: 'pointer', fontFamily: 'inherit',
+};
+const weekNav: CSSProperties = {
+  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18,
+};
+const navBtn: CSSProperties = {
+  width: 32, height: 32, borderRadius: 16, border: 'none', background: C.card,
+  fontSize: 18, color: C.text, cursor: 'pointer', fontFamily: 'inherit', lineHeight: 1,
 };
 const shareBtn: CSSProperties = {
   marginTop: 16, width: '100%', background: C.blueSoft, color: C.blue, border: 'none',
