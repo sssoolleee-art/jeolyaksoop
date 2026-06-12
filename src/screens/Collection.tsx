@@ -28,9 +28,8 @@ export default function Collection() {
       </div>
 
       <div style={forest}>
-        <span style={{ position: 'absolute', top: 18, left: 24, fontSize: 22, opacity: 0.8 }}>☁️</span>
-        <span style={{ position: 'absolute', top: 34, right: 36, fontSize: 16, opacity: 0.6 }}>☁️</span>
-        <span style={{ position: 'absolute', top: 14, right: 96, fontSize: 13, opacity: 0.5 }}>🐦</span>
+        <span style={{ position: 'absolute', top: 18, left: 24, fontSize: 24, opacity: 0.85 }}>☁️</span>
+        <span style={{ position: 'absolute', top: 38, right: 36, fontSize: 16, opacity: 0.55 }}>☁️</span>
         <div style={forestGround} />
         <div style={treeField}>
           {planted.map(({ tree, growing }, i) => {
@@ -41,8 +40,8 @@ export default function Collection() {
                 key={tree.id}
                 style={{
                   ...treeSpot,
-                  fontSize: growing ? 30 : 38 + (i % 3) * 4,
-                  marginTop: (i % 3) * 14,
+                  fontSize: growing ? 32 : 42 + (i % 3) * 3,
+                  marginBottom: (i % 2) * 6,
                   animation: growing ? 'sway 2.4s ease-in-out infinite' : undefined,
                 }}
                 onClick={() => setSelected(tree)}
@@ -129,13 +128,13 @@ const cardTitle: CSSProperties = { fontSize: 14, color: C.sub, margin: '0 0 10px
 const detailSub: CSSProperties = { fontSize: 13, color: C.sub, margin: '6px 0 0' };
 const forest: CSSProperties = {
   position: 'relative', borderRadius: 20, overflow: 'hidden',
-  background: 'linear-gradient(#D7EEFF 0%, #E8F7F0 55%, #C9EBD8 56%, #BFE6CE 100%)',
-  padding: '28px 16px 14px', minHeight: 190,
+  background: 'linear-gradient(#D8EFFB 0%, #E9F6EF 52%, #D6EEDF 100%)',
+  padding: '30px 16px 16px', minHeight: 200,
   display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
 };
 const forestGround: CSSProperties = {
-  position: 'absolute', left: -30, right: -30, bottom: -46, height: 110,
-  background: '#ABDFBE', borderRadius: '50%',
+  position: 'absolute', left: -40, right: -40, bottom: -52, height: 120,
+  background: '#B9E2C8', borderRadius: '50%',
 };
 const treeField: CSSProperties = {
   position: 'relative', display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end',
@@ -152,7 +151,7 @@ const growingBadge: CSSProperties = {
 };
 const forestCaption: CSSProperties = {
   position: 'relative', textAlign: 'center', fontSize: 13, fontWeight: 600,
-  color: '#3D6B4F', margin: '14px 0 0',
+  color: '#33604B', margin: '16px 0 0',
 };
 const themeChip: CSSProperties = {
   background: C.bg, border: '1px solid transparent', borderRadius: 20, padding: '8px 14px',

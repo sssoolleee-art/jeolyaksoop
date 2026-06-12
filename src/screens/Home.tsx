@@ -109,7 +109,7 @@ export default function Home({ onOpenSettings, onGoShop }: {
         <p style={{ fontSize: 13, color: C.sub, margin: '8px 0 0' }}>
           💧 {tree.water} / {GROWTH.completeAt}
           {nextStage && (
-            <span style={{ color: C.green, fontWeight: 700 }}> · {nextStage.label}까지 💧{nextStage.at - tree.water}</span>
+            <span style={{ color: C.water, fontWeight: 700 }}> · {nextStage.label}까지 💧{nextStage.at - tree.water}</span>
           )}
         </p>
         <p style={{ fontSize: 12, color: C.sub2, margin: '3px 0 0' }}>참은 돈 1,000원 = 💧1</p>
@@ -253,7 +253,7 @@ const treeStand: CSSProperties = {
 };
 const ground: CSSProperties = {
   position: 'absolute', bottom: 0, width: 190, height: 54, borderRadius: '50%',
-  background: 'radial-gradient(ellipse at center, #C9EBD8 0%, #DDF3E6 70%, rgba(221,243,230,0) 100%)',
+  background: 'radial-gradient(ellipse at center, #D3EBDD 0%, #E4F3EA 70%, rgba(228,243,234,0) 100%)',
 };
 const bloomHalo: CSSProperties = {
   width: 124, height: 124, borderRadius: 62, margin: '0 auto',
@@ -279,8 +279,9 @@ const shopHint: CSSProperties = {
   marginTop: 14, background: C.greenSoft, color: C.green, border: 'none', borderRadius: 12,
   padding: '10px 14px', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
 };
+// 비료는 보조 액션 — 채워진 초록 대신 소프트 톤 (초록 사용량 절제)
 const fertBtn: CSSProperties = {
-  marginTop: 14, background: C.green, color: '#FFF', border: 'none', borderRadius: 12,
+  marginTop: 14, background: C.greenSoft, color: C.green, border: 'none', borderRadius: 12,
   padding: '10px 16px', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
 };
 const guideCard: CSSProperties = {

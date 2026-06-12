@@ -11,8 +11,9 @@ export const C = {
   line: '#E5E8EB',
   blue: '#3182F6',
   blueSoft: '#E8F3FF',
-  green: '#0E9A63',
-  greenSoft: '#E7F6EF',
+  green: '#0F6C47',        // 딥 포레스트 — CTA 등 핵심 액션에만
+  greenSoft: '#EAF5F0',
+  water: '#1893BD',        // 물방울 계열 (진행바와 한 패밀리)
   orange: '#FF6B00',
   dark: '#191F28',
 };
