@@ -15,6 +15,7 @@ export default function Home({ onOpenSettings, onGoShop }: {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [celebrate, setCelebrate] = useState(false);
+  const [firstRecord, setFirstRecord] = useState<number | null>(null);  // 첫 기록 직후 1회 안내 (적립 물방울 수)
   const [adBusy, setAdBusy] = useState(false);
 
   const tree = trees[0];
@@ -82,6 +83,7 @@ export default function Home({ onOpenSettings, onGoShop }: {
         </div>
         <p style={{ fontSize: 13, color: C.sub, margin: '6px 0 0' }}>
           💧 {tree.water} / {GROWTH.completeAt}
+          <span style={{ color: C.sub2 }}> · 참은 돈 1,000원 = 💧1</span>
         </p>
 
         {/* 완성 직전 비료 안내 (잔여 수치 정직 표기 — 다크패턴 아님) */}
@@ -96,6 +98,15 @@ export default function Home({ onOpenSettings, onGoShop }: {
           </button>
         )}
       </div>
+
+      {records.length === 0 && (
+        <div style={guideCard}>
+          <p style={guideTitle}>🌱 이렇게 키워요</p>
+          <p style={guideLine}>커피·배달·택시… 사려다 참았다면 <b>참았어요</b>를 눌러요</p>
+          <p style={guideLine}>참은 금액만큼 물방울이 쌓이고, 💧120이 되면 나무가 만개해요</p>
+          <p style={guideLine}>만개한 나무는 나의 숲에 영원히 남아요</p>
+        </div>
+      )}
 
       <Button display="block" size="xlarge" onClick={() => setSheetOpen(true)}>참았어요 ✋</Button>
       <button style={subBtn} onClick={onCheckin}>오늘 무지출 체크인</button>
@@ -112,8 +123,30 @@ export default function Home({ onOpenSettings, onGoShop }: {
       <RecordSheet
         visible={sheetOpen}
         onClose={() => setSheetOpen(false)}
-        onSaved={(water, completed) => afterPour(water, completed, '잘 참았어요!')}
+        onSaved={(water, completed) => {
+          const isFirst = useAppStore.getState().records.length === 1;
+          if (isFirst && !completed) setFirstRecord(water);
+          else afterPour(water, completed, '잘 참았어요!');
+        }}
       />
+
+      {/* 첫 기록 직후 1회: 루프 설명 (동기 피크 시점) */}
+      <Sheet visible={firstRecord !== null} onClose={() => setFirstRecord(null)}>
+        <div style={{ textAlign: 'center' }}>
+          <span style={{ fontSize: 56 }}>💧</span>
+          <p style={{ fontSize: 20, fontWeight: 700, color: C.text, margin: '12px 0 6px' }}>
+            첫 절약, 물방울 {firstRecord}개가 됐어요
+          </p>
+          <p style={{ fontSize: 14, color: C.sub, margin: '0 0 4px', lineHeight: 1.6 }}>
+            참은 돈은 사라지지 않고 물방울로 쌓여요.{'\n'}💧120이 되면 나무가 만개하고,
+            만개한 나무는{'\n'}<b>나의 숲</b>에 영원히 남아요.
+          </p>
+          <p style={{ fontSize: 13, color: C.sub2, margin: '0 0 20px' }}>
+            매일 기록하면 연속 스트릭 🔥도 함께 자라요
+          </p>
+          <Button display="block" size="large" onClick={() => setFirstRecord(null)}>계속 키우기</Button>
+        </div>
+      </Sheet>
 
       <Sheet visible={celebrate} onClose={() => setCelebrate(false)}>
         <div style={{ textAlign: 'center' }}>
@@ -159,3 +192,8 @@ const fertBtn: CSSProperties = {
   marginTop: 14, background: C.green, color: '#FFF', border: 'none', borderRadius: 12,
   padding: '10px 16px', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
 };
+const guideCard: CSSProperties = {
+  background: C.greenSoft, borderRadius: 16, padding: '14px 16px', marginBottom: 12,
+};
+const guideTitle: CSSProperties = { fontSize: 14, fontWeight: 700, color: '#1B6B45', margin: '0 0 8px' };
+const guideLine: CSSProperties = { fontSize: 13, color: '#2F5C44', margin: '4px 0 0', lineHeight: 1.5 };

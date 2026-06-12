@@ -1,5 +1,5 @@
 import { CSSProperties, useMemo, useState } from 'react';
-import { Top } from '@toss/tds-mobile';
+import { Button, Top } from '@toss/tds-mobile';
 import { useAppStore } from '../store/useAppStore';
 import { buildWeeklyReport } from '../engine/report';
 import { aggregateWeek, weekKeyOf } from '../engine/aggregate';
@@ -10,7 +10,7 @@ import { copyReportCard } from '../sdk/share';
 import { maybeRequestReview } from '../sdk/review';
 import { C, Toast, card } from './ui';
 
-export default function Report({ onGoShop }: { onGoShop: () => void }) {
+export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; onGoHome: () => void }) {
   const { records, weeklyGoalKrw, isPremium, installedAt } = useAppStore();
   const [toast, setToast] = useState<string | null>(null);
 
@@ -46,6 +46,36 @@ export default function Report({ onGoShop }: { onGoShop: () => void }) {
     setToast(ok ? '리포트 카드가 복사됐어요. 어디든 붙여넣어 자랑하세요!' : '복사에 실패했어요');
     setTimeout(() => setToast(null), 2500);
   };
+
+  // 기록이 한 건도 없으면: 빈 리포트 대신 뭘 받게 되는지 보여준다
+  if (report.recordCount === 0) {
+    return (
+      <div style={{ padding: '0 20px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ margin: '0 -4px' }}>
+          <Top title={<Top.TitleParagraph size={22}>주간 리포트</Top.TitleParagraph>} />
+        </div>
+        <div style={{ ...card, textAlign: 'center', padding: '32px 20px' }}>
+          <span style={{ fontSize: 48 }}>📊</span>
+          <p style={{ fontSize: 17, fontWeight: 700, color: C.text, margin: '12px 0 6px' }}>
+            일요일 밤, 한 주의 절약 성적표가 나와요
+          </p>
+          <p style={{ fontSize: 14, color: C.sub, margin: 0, lineHeight: 1.6 }}>
+            기록이 쌓이면 내 소비 페르소나와 절제력 점수,{'\n'}유혹이 몰린 시간대까지 분석해드려요
+          </p>
+        </div>
+        <div style={{ ...card, opacity: 0.55 }}>
+          <p style={{ fontSize: 12, fontWeight: 700, color: C.sub2, margin: '0 0 8px' }}>미리보기</p>
+          <p style={personaTitle}>새벽 배달 유혹 파이터</p>
+          <p style={personaComment}>밤 11시의 치킨을 이긴 사람은 뭐든 이길 수 있어요.</p>
+          <div style={{ display: 'flex', alignItems: 'flex-end', marginTop: 12 }}>
+            <span style={{ fontSize: 36, fontWeight: 800, color: C.blue, lineHeight: 1 }}>76</span>
+            <span style={{ fontSize: 15, color: C.sub, marginLeft: 2 }}>점</span>
+          </div>
+        </div>
+        <Button display="block" size="large" onClick={onGoHome}>첫 절약 기록하기</Button>
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: '0 20px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>

@@ -44,7 +44,7 @@ export default function App() {
         {tab === 'home' && (
           <Home onOpenSettings={() => setSettingsOpen(true)} onGoShop={() => setTab('shop')} />
         )}
-        {tab === 'report' && <Report onGoShop={() => setTab('shop')} />}
+        {tab === 'report' && <Report onGoShop={() => setTab('shop')} onGoHome={() => setTab('home')} />}
         {tab === 'collection' && <Collection />}
         {tab === 'shop' && <Shop />}
       </main>
