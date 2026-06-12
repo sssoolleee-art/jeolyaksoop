@@ -189,6 +189,16 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
         <p style={cardTitle}>{report.live ? '이번 주 지킨 돈' : '지난주 지킨 돈'}</p>
         <p style={bigNumber}>{report.totalSaved.toLocaleString()}원</p>
         <p style={sub}>{report.recordCount}번 참았어요 · {report.activeDays}일 기록</p>
+        <div style={goalTrack}>
+          <div style={{ ...goalFill, width: `${Math.min(report.totalSaved / weeklyGoalKrw, 1) * 100}%` }} />
+        </div>
+        <p style={sub}>
+          주간 목표 {weeklyGoalKrw.toLocaleString()}원의{' '}
+          <b style={{ color: report.totalSaved >= weeklyGoalKrw ? C.green : C.text }}>
+            {Math.round((report.totalSaved / weeklyGoalKrw) * 100)}%
+          </b>
+          {report.totalSaved >= weeklyGoalKrw && ' · 목표 달성 🎉'}
+        </p>
       </div>
 
       {memoRecords.length > 0 && (
@@ -291,6 +301,12 @@ const lockCard: CSSProperties = {
 const personaCard: CSSProperties = {
   background: 'linear-gradient(150deg, #EAF4FF 0%, #FFFFFF 55%)',
   borderRadius: 20, padding: 20,
+};
+const goalTrack: CSSProperties = {
+  height: 6, background: C.bg, borderRadius: 3, marginTop: 12, overflow: 'hidden',
+};
+const goalFill: CSSProperties = {
+  height: 6, background: C.green, borderRadius: 3, transition: 'width .4s',
 };
 const missionTrack: CSSProperties = {
   height: 8, background: C.bg, borderRadius: 4, marginTop: 12, overflow: 'hidden',

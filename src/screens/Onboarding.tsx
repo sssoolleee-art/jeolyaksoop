@@ -9,11 +9,7 @@ const SLIDES = [
   { emoji: '📊', title: '일요일 밤, 소비 리포트', body: '내 소비 페르소나와 위험 시간대를\n매주 알려드려요.' },
 ];
 
-const GOALS = [
-  { monthly: 30000, label: '월 3만원', desc: '가볍게 시작' },
-  { monthly: 50000, label: '월 5만원', desc: '커피·배달 줄이기' },
-  { monthly: 100000, label: '월 10만원', desc: '본격 절약' },
-];
+import { MONTHLY_GOALS as GOALS } from '../constants/goals';
 
 export default function Onboarding() {
   const completeOnboarding = useAppStore(s => s.completeOnboarding);

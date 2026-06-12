@@ -1,8 +1,7 @@
 import { CSSProperties, useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
+import { MONTHLY_GOALS } from '../constants/goals';
 import { C, Sheet, btn, card, useBackEvent } from './ui';
-
-const GOALS = [30000, 50000, 100000];   // 월 3/5/10만원 → 주간 환산 표시
 
 export default function Settings({ onClose }: { onClose: () => void }) {
   const { weeklyGoalKrw, setWeeklyGoal, notif, setNotif, resetAll, isPremium } = useAppStore();
@@ -35,15 +34,15 @@ export default function Settings({ onClose }: { onClose: () => void }) {
         <div style={card}>
           <p style={sectionTitle}>한 달 절약 목표</p>
           <div style={{ display: 'flex', gap: 8 }}>
-            {GOALS.map(g => {
-              const weekly = Math.round(g / 4.345 / 1000) * 1000;
+            {MONTHLY_GOALS.map(g => {
+              const weekly = Math.round(g.monthly / 4.345 / 1000) * 1000;
               const active = weeklyGoalKrw === weekly;
               return (
-                <button key={g}
+                <button key={g.monthly}
                   style={{ ...goalChip, ...(active ? goalChipActive : {}) }}
                   onClick={() => setWeeklyGoal(weekly)}
                 >
-                  월 {g / 10000}만원
+                  {g.label}
                 </button>
               );
             })}
