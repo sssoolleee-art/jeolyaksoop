@@ -49,19 +49,22 @@ export default function Collection() {
           {planted.map(({ tree, growing }, i) => {
             const theme = themeOf(tree.themeId);
             const emoji = growing ? theme.stageEmoji[stageOf(tree.water).key] : theme.stageEmoji.bloom;
+            const size = growing ? 40 : 52 + (i % 3) * 4;
             return (
               <button
                 key={tree.id}
-                style={{
-                  ...treeSpot,
-                  fontSize: growing ? 32 : 42 + (i % 3) * 3,
-                  marginBottom: (i % 2) * 6,
-                  animation: growing ? 'sway 2.4s ease-in-out infinite' : undefined,
-                }}
+                style={{ ...treeSpot, marginBottom: (i % 2) * 8 }}
                 onClick={() => setSelected(tree)}
                 aria-label={theme.label}
               >
-                {emoji}
+                <span style={{
+                  fontSize: size, lineHeight: 1, display: 'inline-block',
+                  animation: growing ? 'sway 2.4s ease-in-out infinite' : undefined,
+                }}>
+                  {emoji}
+                </span>
+                {/* 접지 그림자: 나무를 땅에 붙인다 */}
+                <span style={{ ...treeShadow, width: size * 0.72 }} />
                 {growing && <span style={growingBadge}>자라는 중</span>}
               </button>
             );
@@ -151,21 +154,26 @@ const cardTitle: CSSProperties = { fontSize: 14, color: C.sub, margin: '0 0 10px
 const detailSub: CSSProperties = { fontSize: 13, color: C.sub, margin: '6px 0 0' };
 const forest: CSSProperties = {
   position: 'relative', borderRadius: 20, overflow: 'hidden',
-  background: 'linear-gradient(#D8EFFB 0%, #E9F6EF 52%, #D6EEDF 100%)',
-  padding: '30px 16px 16px', minHeight: 200,
+  background: 'linear-gradient(#D8EFFB 0%, #EAF6F0 48%, #D6EEDF 100%)',
+  padding: '52px 16px 18px', minHeight: 300,
   display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
 };
 const forestGround: CSSProperties = {
-  position: 'absolute', left: -40, right: -40, bottom: -52, height: 120,
-  background: '#B9E2C8', borderRadius: '50%',
+  position: 'absolute', left: -40, right: -40, bottom: -70, height: 190,
+  background: '#BCE3CB', borderRadius: '50%',
 };
 const treeField: CSSProperties = {
   position: 'relative', display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end',
-  justifyContent: 'center', columnGap: 6, rowGap: 0, minHeight: 96,
+  justifyContent: 'center', columnGap: 10, rowGap: 2, minHeight: 130,
 };
 const treeSpot: CSSProperties = {
   background: 'none', border: 'none', padding: 2, cursor: 'pointer',
   lineHeight: 1, position: 'relative',
+  display: 'inline-flex', flexDirection: 'column', alignItems: 'center',
+};
+const treeShadow: CSSProperties = {
+  height: 10, borderRadius: '50%', marginTop: -5,
+  background: 'radial-gradient(ellipse at center, rgba(31,77,52,0.22) 0%, rgba(31,77,52,0) 70%)',
 };
 const growingBadge: CSSProperties = {
   position: 'absolute', top: -16, left: '50%', transform: 'translateX(-50%)',
@@ -186,10 +194,10 @@ const rankPill: CSSProperties = {
   borderRadius: 14, padding: '5px 14px', backdropFilter: 'blur(2px)',
 };
 const plot: CSSProperties = {
-  width: 34, height: 34, borderRadius: 17, border: '2px dashed rgba(15,108,71,0.30)',
-  color: 'rgba(15,108,71,0.40)', fontSize: 18, fontWeight: 700,
+  width: 40, height: 40, borderRadius: 20, border: '2px dashed rgba(15,108,71,0.30)',
+  color: 'rgba(15,108,71,0.40)', fontSize: 20, fontWeight: 700,
   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-  marginLeft: 8, marginBottom: 4,
+  marginLeft: 8, marginBottom: 10, alignSelf: 'flex-end',
 };
 const themeChip: CSSProperties = {
   background: C.bg, border: '1px solid transparent', borderRadius: 20, padding: '8px 14px',
