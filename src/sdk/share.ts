@@ -1,4 +1,4 @@
-import { contactsViral, setClipboardText } from '@apps-in-toss/web-framework';
+import { contactsViral, setClipboardText, share, getTossShareLink, generateHapticFeedback } from '@apps-in-toss/web-framework';
 import { useAppStore } from '../store/useAppStore';
 import { track } from './analytics';
 
@@ -20,13 +20,29 @@ export function inviteFriend(): void {
   } catch { /* 미지원 환경 */ }
 }
 
-// 리포트 카드 텍스트 공유.
-// 주의: navigator.share()는 시스템 다이얼로그로 간주되어 심사 반려 사유 →
-// 클립보드 복사 후 호출부에서 커스텀 토스트로 안내한다.
-export async function copyReportCard(text: string): Promise<boolean> {
+// 햅틱 진동 (토스 밖에서는 Web Vibration API 폴백)
+export type HapticType = 'success' | 'confetti' | 'tap' | 'basicWeak' | 'tickWeak';
+export function haptic(type: HapticType) {
+  try { void generateHapticFeedback({ type }); }
+  catch { try { navigator.vibrate?.(type === 'confetti' ? [40, 60, 40] : 20); } catch { /* 무시 */ } }
+}
+
+// 토스 공식 공유 링크 (미설치 유저는 스토어로 유도됨)
+async function appShareLink(): Promise<string | null> {
+  try { return await getTossShareLink('intoss://jeolyaksoop'); }
+  catch { return null; }
+}
+
+// 텍스트 공유: 토스 공유 시트 → 실패 시 클립보드 복사 폴백
+// 주의: navigator.share()는 심사 반려 사유 — 반드시 SDK share만 사용
+export async function shareText(text: string): Promise<'shared' | 'copied' | false> {
   track('report_share');
-  try { await setClipboardText(text); return true; }
-  catch { /* 폴백으로 진행 */ }
-  try { await navigator.clipboard.writeText(text); return true; }
+  const link = await appShareLink();
+  const full = link ? `${text}\n${link}` : text;
+  try { await share({ message: full }); return 'shared'; }
+  catch { /* 토스 밖: 클립보드 폴백 */ }
+  try { await setClipboardText(full); return 'copied'; }
+  catch { /* 다음 폴백 */ }
+  try { await navigator.clipboard.writeText(full); return 'copied'; }
   catch { return false; }
 }

@@ -6,7 +6,7 @@ import { aggregateWeek, weekKeyOf } from '../engine/aggregate';
 import { CATEGORIES } from '../constants/categories';
 import { MONETIZATION_READY } from '../constants/products';
 import { track } from '../sdk/analytics';
-import { copyReportCard } from '../sdk/share';
+import { shareText } from '../sdk/share';
 import { maybeRequestReview } from '../sdk/review';
 import { C, Toast, card } from './ui';
 
@@ -63,10 +63,11 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
       report.personaComment,
       ``,
       `시작한 뒤로 지금까지 ${totalAll.toLocaleString()}원을 지켰어요 💰`,
-      `토스에서 '절약숲'을 검색하면 너도 키울 수 있어 🌱`,
+      `너도 절약숲 키워볼래? 🌱`,
     ].join('\n');
-    const ok = await copyReportCard(text);
-    setToast(ok ? '복사 완료! 붙여넣으면 친구도 절약숲을 찾아올 수 있어요' : '복사에 실패했어요');
+    const result = await shareText(text);
+    if (result === 'copied') setToast('복사 완료! 붙여넣으면 친구도 절약숲에 올 수 있어요');
+    if (result === false) setToast('공유에 실패했어요');
     setTimeout(() => setToast(null), 2500);
   };
 

@@ -4,6 +4,7 @@ import { useAppStore, rewardedAdRemaining, effectiveStreak } from '../store/useA
 import { MONETIZATION_READY } from '../constants/products';
 import { stageOf, themeOf, GROWTH } from '../constants/growth';
 import { showRewarded } from '../sdk/ads';
+import { haptic, shareText } from '../sdk/share';
 import RecordSheet from './RecordSheet';
 import { C, Sheet, Toast } from './ui';
 
@@ -32,8 +33,13 @@ export default function Home({ onOpenSettings, onGoShop }: {
     setTimeout(() => setToast(null), 2200);
   };
   const afterPour = (water: number, completed: boolean, label: string) => {
-    if (completed) setCelebrate(true);
-    else flash(`${label} 물방울 +${water}`);
+    if (completed) {
+      haptic('confetti');
+      setCelebrate(true);
+    } else {
+      haptic('basicWeak');
+      flash(`${label} 물방울 +${water}`);
+    }
   };
 
   const onCheckin = () => {
@@ -157,22 +163,63 @@ export default function Home({ onOpenSettings, onGoShop }: {
       </Sheet>
 
       <Sheet visible={celebrate} onClose={() => setCelebrate(false)}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={bloomHalo}>
-            <span style={{ fontSize: 72, lineHeight: 1 }}>{theme.stageEmoji.bloom}</span>
-          </div>
-          <p style={{ fontSize: 20, fontWeight: 700, color: C.text, margin: '14px 0 6px' }}>
-            나무가 만개했어요!
-          </p>
-          <p style={{ fontSize: 14, color: C.sub, margin: '0 0 20px' }}>
-            나의 숲에 영원히 남았어요. 새 씨앗을 심어뒀어요.
-          </p>
-          <Button display="block" size="large" onClick={() => setCelebrate(false)}>새 나무 키우기</Button>
-        </div>
+        <CelebrateContent onClose={() => setCelebrate(false)} />
       </Sheet>
     </div>
   );
 }
+
+// 만개 축하: 컨페티 + 통계 인정 + 자랑하기 (감정 피크 — 기획서 2.7 공유 시점)
+const CONFETTI = ['🎉', '✨', '🌸', '💧', '🍃', '⭐', '🎊', '✨', '🌸', '💛'];
+
+function CelebrateContent({ onClose }: { onClose: () => void }) {
+  const trees = useAppStore(s => s.trees);
+  const done = trees.filter(t => t.completedAt).sort((a, b) => b.completedAt! - a.completedAt!);
+  const justDone = done[0];
+  if (!justDone) return null;
+  const theme = themeOf(justDone.themeId);
+  const days = Math.max(Math.ceil((justDone.completedAt! - justDone.startedAt) / 86400000), 1);
+
+  const brag = async () => {
+    await shareText([
+      `🌳 절약숲에서 ${done.length}번째 나무를 다 키웠어요!`,
+      `${days}일 동안 ${justDone.savedAmount.toLocaleString()}원을 참아서 만든 ${theme.label}예요 ${theme.stageEmoji.bloom}`,
+      `너도 절약숲 키워볼래? 🌱`,
+    ].join('\n'));
+  };
+
+  return (
+    <div style={{ textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      {CONFETTI.map((c, i) => (
+        <span key={i} style={{
+          position: 'absolute', top: -24, left: `${4 + i * 10}%`, fontSize: 16 + (i % 3) * 6,
+          animation: `confettiFall ${1.6 + (i % 4) * 0.5}s linear ${i * 0.22}s infinite`,
+          pointerEvents: 'none',
+        }}>{c}</span>
+      ))}
+      <div style={{ ...bloomHalo, animation: 'popIn .6s ease-out' }}>
+        <span style={{ fontSize: 76, lineHeight: 1 }}>{theme.stageEmoji.bloom}</span>
+      </div>
+      <p style={{ fontSize: 22, fontWeight: 800, color: C.text, margin: '14px 0 4px' }}>
+        {done.length}번째 나무, 만개!
+      </p>
+      <p style={{ fontSize: 15, color: '#333D4B', margin: '0 0 2px', lineHeight: 1.6 }}>
+        {days}일 동안 <b style={{ color: C.green }}>{justDone.savedAmount.toLocaleString()}원</b>을 참아서
+        키운 {theme.label}예요.
+      </p>
+      <p style={{ fontSize: 13, color: C.sub2, margin: '0 0 22px' }}>
+        나의 숲에 영원히 남았어요. 새 씨앗도 심어뒀어요.
+      </p>
+      <Button display="block" size="large" onClick={brag}>친구에게 자랑하기</Button>
+      <button style={celebrateLater} onClick={onClose}>새 나무 키우러 가기</button>
+    </div>
+  );
+}
+
+const celebrateLater: CSSProperties = {
+  background: 'none', border: 'none', color: C.sub, fontSize: 14, fontWeight: 600,
+  padding: '14px 0 0', cursor: 'pointer', fontFamily: 'inherit', width: '100%',
+};
 
 const wrap: CSSProperties = {
   display: 'flex', flexDirection: 'column', minHeight: '100%', padding: 20, boxSizing: 'border-box',
