@@ -47,7 +47,8 @@ const sheetOverlay: CSSProperties = {
   display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', zIndex: 100,
 };
 const sheetBody: CSSProperties = {
-  background: C.card, borderRadius: '24px 24px 0 0', padding: '24px 24px 36px',
+  background: C.card, borderRadius: '24px 24px 0 0',
+  padding: '24px 24px calc(28px + env(safe-area-inset-bottom))',
   maxHeight: '85vh', overflowY: 'auto',
 };
 

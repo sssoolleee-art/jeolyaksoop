@@ -73,7 +73,8 @@ const shell: CSSProperties = {
 const main: CSSProperties = { flex: 1, overflowY: 'auto' };
 const tabBar: CSSProperties = {
   display: 'flex', background: C.card, borderTop: `1px solid ${C.line}`,
-  paddingBottom: 'env(safe-area-inset-bottom)',
+  // viewport-fit=cover 필요 (index.html). env() 미지원 기기 대비 최소 10px 보장
+  paddingBottom: 'max(env(safe-area-inset-bottom), 10px)',
 };
 const tabBtn: CSSProperties = {
   flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,

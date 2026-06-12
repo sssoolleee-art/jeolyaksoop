@@ -80,7 +80,8 @@ export default function Onboarding() {
 }
 
 const wrap: CSSProperties = {
-  display: 'flex', flexDirection: 'column', minHeight: '100vh', padding: 24,
+  display: 'flex', flexDirection: 'column', minHeight: '100vh',
+  padding: '24px 24px calc(24px + env(safe-area-inset-bottom))',
   boxSizing: 'border-box', background: C.bg,
 };
 const center: CSSProperties = {

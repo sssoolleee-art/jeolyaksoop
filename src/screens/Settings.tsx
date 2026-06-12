@@ -18,7 +18,7 @@ export default function Settings({ onClose }: { onClose: () => void }) {
 
   return (
     <div style={overlay}>
-      <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ padding: '20px 20px calc(28px + env(safe-area-inset-bottom))', display: 'flex', flexDirection: 'column', gap: 16 }}>
         <p style={{ fontSize: 20, fontWeight: 700, color: C.text, margin: '8px 0 0' }}>설정</p>
 
         <div style={card}>
