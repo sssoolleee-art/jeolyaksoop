@@ -80,7 +80,7 @@ const cell: CSSProperties = {
 };
 const presets: CSSProperties = { display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 };
 const preset: CSSProperties = {
-  background: C.blueSoft, color: C.blue, fontWeight: 600, border: 'none',
+  background: C.greenSoft, color: C.green, fontWeight: 600, border: 'none',
   borderRadius: 12, padding: '10px 14px', fontSize: 15, cursor: 'pointer', fontFamily: 'inherit',
 };
 const input: CSSProperties = {
@@ -88,7 +88,7 @@ const input: CSSProperties = {
   fontSize: 16, fontFamily: 'inherit', outline: 'none', minWidth: 0,
 };
 const saveBtn: CSSProperties = {
-  background: C.blue, color: '#FFF', fontWeight: 700, border: 'none',
+  background: C.green, color: '#FFF', fontWeight: 700, border: 'none',
   borderRadius: 12, padding: '0 18px', fontSize: 15, cursor: 'pointer', fontFamily: 'inherit',
 };
 const back: CSSProperties = {

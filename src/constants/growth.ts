@@ -10,7 +10,7 @@ export const GROWTH = {
     { key: 'seed',    label: '씨앗',  at: 0 },
     { key: 'sprout',  label: '새싹',  at: 10 },
     { key: 'sapling', label: '묘목',  at: 30 },
-    { key: 'tree',    label: '나무',  at: 70 },
+    { key: 'tree',    label: '큰나무', at: 70 },
     { key: 'bloom',   label: '만개',  at: 120 },  // 완성
   ],
   completeAt: 120,

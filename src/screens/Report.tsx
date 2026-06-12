@@ -84,7 +84,7 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
       </div>
       {report.live && (
         <p style={{ fontSize: 13, color: C.sub, margin: 0, textAlign: 'center' }}>
-          이번 주 진행 중 리포트예요. 일요일 밤에 최종 리포트가 완성돼요.
+          아직 집계 중이에요. 일요일 밤에 완성돼요.
         </p>
       )}
 
@@ -99,13 +99,13 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
           빈도 {report.scoreBreakdown.freq} · 규모 {report.scoreBreakdown.volume} · 일관성 {report.scoreBreakdown.consistency}
         </p>
         <p style={{ fontSize: 14, color: C.sub, margin: '8px 0 0' }}>{report.summary}</p>
-        <button style={shareBtn} onClick={share}>페르소나 카드 공유하기</button>
+        <button style={shareBtn} onClick={share}>내 페르소나 자랑하기</button>
       </div>
 
       <div style={card}>
         <p style={cardTitle}>이번 주 지킨 돈</p>
         <p style={bigNumber}>{report.totalSaved.toLocaleString()}원</p>
-        <p style={sub}>{report.recordCount}번 참음 · {report.activeDays}일 활동</p>
+        <p style={sub}>{report.recordCount}번 참았어요 · {report.activeDays}일 기록</p>
       </div>
 
       {report.recordCount > 0 && (

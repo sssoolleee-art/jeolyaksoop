@@ -13,9 +13,9 @@ import { C } from './screens/ui';
 type Tab = 'home' | 'report' | 'collection' | 'shop';
 
 const TABS: { id: Tab; label: string; emoji: string }[] = [
-  { id: 'home',       label: '숲',     emoji: '🌳' },
+  { id: 'home',       label: '홈',     emoji: '🌳' },
   { id: 'report',     label: '리포트', emoji: '📊' },
-  { id: 'collection', label: '도감',   emoji: '📖' },
+  { id: 'collection', label: '나의 숲', emoji: '🌲' },
   ...(MONETIZATION_READY ? [{ id: 'shop' as Tab, label: '상점', emoji: '🛒' }] : []),
 ];
 
