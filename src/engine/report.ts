@@ -17,9 +17,18 @@ export function buildWeeklyReport(opts: {
   weeklyGoalKrw: number;
   isPremium: boolean;
   isFirstWeek: boolean;             // 첫 주는 전체 공개 (체험)
+  checkinDates?: string[];          // 무지출 체크인 날들 ('YYYY-MM-DD') — 활동일로 인정
 }): WeeklyReport {
   const weekKey = opts.weekKey ?? weekKeyOf(Date.now() - 7 * 86400000);
   const agg = aggregateWeek(opts.records, weekKey);
+
+  // 무지출 체크인도 절제 활동 — 기록이 없는 체크인 날을 활동일에 합산
+  const recordDays = new Set(agg.records.map(r => new Date(r.createdAt).toDateString()));
+  const extraCheckinDays = (opts.checkinDates ?? []).filter(d => {
+    const t = new Date(`${d}T12:00:00`);
+    return weekKeyOf(t.getTime()) === weekKey && !recordDays.has(t.toDateString());
+  }).length;
+  agg.activeDays = Math.min(agg.activeDays + extraCheckinDays, 7);
   const { score, breakdown } = scoreWeek(agg, opts.weeklyGoalKrw);
   const persona = pickPersona(agg);
   const seed = parseInt(weekKey.slice(-2), 10);

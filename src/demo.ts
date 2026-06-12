@@ -34,6 +34,7 @@ function maybeSeedDemo() {
     ],
     streak: 12,
     lastActiveDate: new Date(Date.now() - 86400000).toISOString().slice(0, 10),
+    checkinDates: [],
     weeklyGoalKrw: 46000,   // 월 20만원 기준
     isPremium: false, adsRemoved: false,
     ownedThemes: ['basic', 'season1a', 'season1b', 'season1c'],

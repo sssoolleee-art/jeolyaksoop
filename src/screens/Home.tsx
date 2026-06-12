@@ -112,7 +112,7 @@ export default function Home({ onOpenSettings, onGoShop }: {
             <span style={{ color: C.water, fontWeight: 700 }}> · {nextStage.label}까지 💧{nextStage.at - tree.water}</span>
           )}
         </p>
-        <p style={{ fontSize: 12, color: C.sub2, margin: '3px 0 0' }}>참은 돈 1,000원 = 💧1</p>
+        <p style={{ fontSize: 12, color: C.sub2, margin: '3px 0 0' }}>참은 돈 1,000원 = 💧1 (한 번에 최대 20)</p>
 
         {/* 완성 직전 비료 안내 (잔여 수치 정직 표기 — 다크패턴 아님) */}
         {MONETIZATION_READY && remainWater > 0 && remainWater <= 10 && fertilizers === 0 && (

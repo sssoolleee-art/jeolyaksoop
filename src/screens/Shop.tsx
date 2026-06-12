@@ -84,7 +84,7 @@ const row: CSSProperties = {
   borderBottom: `1px solid ${C.bg}`,
 };
 const buyBtn: CSSProperties = {
-  background: C.blueSoft, color: C.blue, border: 'none', borderRadius: 10,
+  background: C.greenSoft, color: C.green, border: 'none', borderRadius: 10,
   padding: '9px 14px', fontSize: 14, fontWeight: 700, cursor: 'pointer',
   fontFamily: 'inherit', whiteSpace: 'nowrap', flexShrink: 0,
 };

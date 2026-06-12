@@ -11,7 +11,7 @@ import { maybeRequestReview } from '../sdk/review';
 import { C, Toast, card } from './ui';
 
 export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; onGoHome: () => void }) {
-  const { records, weeklyGoalKrw, isPremium, installedAt } = useAppStore();
+  const { records, weeklyGoalKrw, isPremium, installedAt, checkinDates } = useAppStore();
   const [toast, setToast] = useState<string | null>(null);
 
   // offset: 0 = 이번 주(집계 중), 1 = 지난주, 2 = 2주 전 …
@@ -30,11 +30,11 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
       live: offset === 0,
       ...buildWeeklyReport({
         records, weekKey: weekKeyOf(Date.now() - offset * 7 * 86400000),
-        weeklyGoalKrw, isPremium,
+        weeklyGoalKrw, isPremium, checkinDates,
         isFirstWeek: installedDays < 7 * 86400000,
       }),
     };
-  }, [records, weeklyGoalKrw, isPremium, installedAt, offset]);
+  }, [records, weeklyGoalKrw, isPremium, installedAt, offset, checkinDates]);
 
   // 주차 네비게이션 범위: 가장 오래된 기록이 있는 주 ~ 이번 주
   const mondayOf = (off: number) => {
@@ -145,7 +145,7 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
 
       {report.live && mission && (
         <div style={card}>
-          <p style={cardTitle}>이번 주 미션</p>
+          <p style={cardTitle}>이번 주 미션 <span style={{ fontWeight: 400 }}>— 지난주 기록으로 만든 도전 과제예요</span></p>
           <p style={{ fontSize: 15, fontWeight: 600, color: C.text, margin: 0 }}>{mission.title}</p>
           <div style={missionTrack}>
             <div style={{ ...missionFill, width: `${Math.min(report.totalSaved / mission.targetAmount, 1) * 100}%` }} />
@@ -171,18 +171,24 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
         </div>
       ) : (
       <>
+      {/* 정체성(페르소나)과 성적(점수)은 다른 정보 — 카드 분리 */}
       <div style={personaCard}>
+        <p style={cardTitle}>나의 소비 페르소나</p>
         <p style={personaTitle}>{report.personaTitle}</p>
         <p style={personaComment}>{report.personaComment}</p>
-        <div style={{ display: 'flex', alignItems: 'flex-end', marginTop: 16 }}>
+        <button style={shareBtn} onClick={share}>내 페르소나 자랑하기</button>
+      </div>
+
+      <div style={card}>
+        <p style={cardTitle}>절제력 점수</p>
+        <div style={{ display: 'flex', alignItems: 'flex-end' }}>
           <span style={{ fontSize: 44, fontWeight: 800, color: C.blue, lineHeight: 1 }}>{report.score}</span>
-          <span style={{ fontSize: 16, color: C.sub, marginLeft: 2 }}>점</span>
+          <span style={{ fontSize: 16, color: C.sub, marginLeft: 2 }}>/ 100점</span>
         </div>
-        <p style={{ fontSize: 13, color: C.sub2, margin: '6px 0 0' }}>
-          빈도 {report.scoreBreakdown.freq} · 규모 {report.scoreBreakdown.volume} · 일관성 {report.scoreBreakdown.consistency}
+        <p style={{ fontSize: 13, color: C.sub2, margin: '8px 0 0' }}>
+          기록 빈도 {report.scoreBreakdown.freq}/40 · 절약 규모 {report.scoreBreakdown.volume}/30 · 꾸준함 {report.scoreBreakdown.consistency}/30
         </p>
         <p style={{ fontSize: 14, color: C.sub, margin: '8px 0 0' }}>{report.summary}</p>
-        <button style={shareBtn} onClick={share}>내 페르소나 자랑하기</button>
       </div>
 
       <div style={card}>
@@ -217,7 +223,7 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
 
       {report.recordCount > 0 && (
         <div style={card}>
-          <p style={cardTitle}>카테고리별</p>
+          <p style={cardTitle}>무엇을 참았나</p>
           {Object.entries(report.byCategory).sort((a, b) => b[1] - a[1]).map(([id, amt]) => {
             const c = CATEGORIES.find(x => x.id === id)!;
             return (
@@ -252,7 +258,7 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
             <p style={sub}>이 시간대를 조심하면 다음 주가 편해져요</p>
           </div>
           <div style={card}>
-            <p style={cardTitle}>다음 주 미션</p>
+            <p style={cardTitle}>다음 주 미션 <span style={{ fontWeight: 400 }}>— 다음 주 리포트 탭에서 달성하면 💧5</span></p>
             <p style={{ fontSize: 17, fontWeight: 600, color: C.text, margin: 0 }}>
               {report.nextMission.title}
             </p>

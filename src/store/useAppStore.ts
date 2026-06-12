@@ -13,6 +13,7 @@ interface AppState {
   trees: Tree[];                 // [0]이 현재 키우는 나무
   streak: number;
   lastActiveDate: string | null; // 'YYYY-MM-DD'
+  checkinDates: string[];        // 무지출 체크인한 날들 (리포트 활동일 반영용)
   weeklyGoalKrw: number;         // 주간 목표 (온보딩 월 목표 / 4.345)
   isPremium: boolean;
   adsRemoved: boolean;
@@ -44,7 +45,7 @@ const newTree = (themeId = 'basic'): Tree =>
   ({ id: String(Date.now()), themeId, water: 0, startedAt: Date.now(), savedAmount: 0 });
 
 const PERSIST_KEYS = [
-  'onboarded', 'records', 'trees', 'streak', 'lastActiveDate', 'weeklyGoalKrw', 'isPremium',
+  'onboarded', 'records', 'trees', 'streak', 'lastActiveDate', 'checkinDates', 'weeklyGoalKrw', 'isPremium',
   'adsRemoved', 'ownedThemes', 'fertilizers', 'rewardedAdCountToday', 'rewardedAdDate',
   'installedAt', 'notif',
 ] as const;
@@ -53,6 +54,7 @@ const DEFAULTS = {
   onboarded: false,
   records: [] as SavingRecord[], trees: [newTree()], streak: 0,
   lastActiveDate: null as string | null,
+  checkinDates: [] as string[],
   weeklyGoalKrw: 50000, isPremium: false, adsRemoved: false,
   ownedThemes: ['basic'], fertilizers: 0,
   rewardedAdCountToday: 0, rewardedAdDate: null as string | null,
@@ -131,6 +133,7 @@ export const useAppStore = create<AppState>((set, get) => {
     checkin() {
       const today = todayStr();
       if (get().lastActiveDate === today) return null;   // 오늘 이미 활동함
+      set({ checkinDates: [...get().checkinDates, today] });
       touchStreak();
       const completed = pour(GROWTH.checkinWater);
       track('checkin');

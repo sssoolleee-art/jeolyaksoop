@@ -2,7 +2,9 @@ import { Product } from '../types';
 
 // 콘솔에서 IAP 상품·광고 ID·공유 moduleId 발급 후 true로 전환:
 // 상점 탭, 보상형 광고, 친구 초대, 프리미엄 잠금이 함께 켜진다.
-export const MONETIZATION_READY = false;
+// 개발 데모(?demo=1)에서는 미리보기로 항상 켜짐 (프로덕션 빌드에는 영향 없음)
+export const MONETIZATION_READY = false ||
+  (import.meta.env.DEV && typeof location !== 'undefined' && new URLSearchParams(location.search).has('demo'));
 
 // SKU는 앱인토스 콘솔에서 상품 등록 후 발급받아 교체한다.
 // ★ 배포 전 반드시: grep -rn "PENDING_" src/ → 0건 확인 (사주앱 SKU 유실 사고 재발 방지)
