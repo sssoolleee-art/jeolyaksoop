@@ -1,4 +1,5 @@
 import { CSSProperties } from 'react';
+import { Top } from '@toss/tds-mobile';
 import { useAppStore } from '../store/useAppStore';
 import { THEMES, themeOf } from '../constants/growth';
 import { MONETIZATION_READY } from '../constants/products';
@@ -12,7 +13,10 @@ export default function Collection() {
   const current = trees[0];
 
   return (
-    <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16, minHeight: '100%', boxSizing: 'border-box' }}>
+    <div style={{ padding: '0 20px 20px', display: 'flex', flexDirection: 'column', gap: 16, minHeight: '100%', boxSizing: 'border-box' }}>
+      <div style={{ margin: '0 -4px' }}>
+        <Top title={<Top.TitleParagraph size={22}>나의 숲</Top.TitleParagraph>} />
+      </div>
       <div style={card}>
         <p style={cardTitle}>내 나무 테마</p>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>

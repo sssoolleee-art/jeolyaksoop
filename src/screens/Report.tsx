@@ -1,4 +1,5 @@
 import { CSSProperties, useMemo, useState } from 'react';
+import { Top } from '@toss/tds-mobile';
 import { useAppStore } from '../store/useAppStore';
 import { buildWeeklyReport } from '../engine/report';
 import { aggregateWeek, weekKeyOf } from '../engine/aggregate';
@@ -47,7 +48,10 @@ export default function Report({ onGoShop }: { onGoShop: () => void }) {
   };
 
   return (
-    <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <div style={{ padding: '0 20px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ margin: '0 -4px' }}>
+        <Top title={<Top.TitleParagraph size={22}>주간 리포트</Top.TitleParagraph>} />
+      </div>
       {report.live && (
         <p style={{ fontSize: 13, color: C.sub, margin: 0, textAlign: 'center' }}>
           이번 주 진행 중 리포트예요. 일요일 밤에 최종 리포트가 완성돼요.

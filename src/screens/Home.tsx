@@ -1,10 +1,11 @@
 import { CSSProperties, useState } from 'react';
+import { Button } from '@toss/tds-mobile';
 import { useAppStore, rewardedAdRemaining } from '../store/useAppStore';
 import { MONETIZATION_READY } from '../constants/products';
 import { stageOf, themeOf, GROWTH } from '../constants/growth';
 import { showRewarded } from '../sdk/ads';
 import RecordSheet from './RecordSheet';
-import { C, Sheet, Toast, btn } from './ui';
+import { C, Sheet, Toast } from './ui';
 
 export default function Home({ onOpenSettings, onGoShop }: {
   onOpenSettings: () => void; onGoShop: () => void;
@@ -96,7 +97,7 @@ export default function Home({ onOpenSettings, onGoShop }: {
         )}
       </div>
 
-      <button style={btn(C.blue)} onClick={() => setSheetOpen(true)}>참았어요 ✋</button>
+      <Button display="block" size="xlarge" onClick={() => setSheetOpen(true)}>참았어요 ✋</Button>
       <button style={subBtn} onClick={onCheckin}>오늘 무지출 체크인</button>
       {MONETIZATION_READY && (
         <button
@@ -123,7 +124,7 @@ export default function Home({ onOpenSettings, onGoShop }: {
           <p style={{ fontSize: 14, color: C.sub, margin: '0 0 20px' }}>
             도감에 영구 보관됐어요. 새 씨앗이 심어졌습니다.
           </p>
-          <button style={btn(C.green)} onClick={() => setCelebrate(false)}>새 나무 키우기</button>
+          <Button display="block" size="large" onClick={() => setCelebrate(false)}>새 나무 키우기</Button>
         </div>
       </Sheet>
     </div>

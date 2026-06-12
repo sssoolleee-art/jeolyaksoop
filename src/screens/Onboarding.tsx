@@ -1,6 +1,7 @@
 import { CSSProperties, useState } from 'react';
+import { Button } from '@toss/tds-mobile';
 import { useAppStore } from '../store/useAppStore';
-import { C, btn } from './ui';
+import { C } from './ui';
 
 const SLIDES = [
   { emoji: '✋', title: '참았다면, 기록하세요', body: '커피 한 잔, 배달 한 번.\n참은 소비를 2탭으로 기록해요.' },
@@ -38,9 +39,9 @@ export default function Onboarding() {
             <span key={i} style={{ ...dot, background: i === step ? C.blue : C.line }} />
           ))}
         </div>
-        <button style={btn(C.blue)} onClick={() => setStep(step + 1)}>
+        <Button display="block" size="xlarge" onClick={() => setStep(step + 1)}>
           {step === 2 ? '시작하기' : '다음'}
-        </button>
+        </Button>
         {step < 2 && (
           <button style={skip} onClick={() => setStep(3)}>건너뛰기</button>
         )}
@@ -74,7 +75,7 @@ export default function Onboarding() {
           <span style={{ fontSize: 22 }}>{notifOk ? '✅' : '⬜'}</span>
         </button>
       </div>
-      <button style={btn(C.blue)} onClick={finish}>숲 만들기 시작</button>
+      <Button display="block" size="xlarge" onClick={finish}>숲 만들기 시작</Button>
     </div>
   );
 }
