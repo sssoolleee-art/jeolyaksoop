@@ -18,9 +18,10 @@ const FOREST_RANKS = [
   { min: 20, title: '전설의 숲' },
 ];
 
-export default function Collection() {
+export default function Collection({ onGoShop }: { onGoShop: () => void }) {
   const { trees, adsRemoved, ownedThemes, isPremium, setTheme } = useAppStore();
   const [selected, setSelected] = useState<Tree | null>(null);
+  const lockedCount = THEMES.filter(t => !ownedThemes.includes(t.id) && !isPremium).length;
   const done = [...trees.filter(t => t.completedAt)].sort((a, b) => a.completedAt! - b.completedAt!);
   const current = trees[0];
   const totalSaved = done.reduce((a, t) => a + t.savedAmount, 0);
@@ -87,23 +88,33 @@ export default function Collection() {
       </div>
 
       <div style={card}>
-        <p style={cardTitle}>내 나무 테마</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+          <p style={cardTitle}>내 나무 테마</p>
+          {MONETIZATION_READY && lockedCount > 0 && (
+            <button style={themeMoreBtn} onClick={onGoShop}>테마 더 보기 ›</button>
+          )}
+        </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {THEMES.map(t => {
             const owned = ownedThemes.includes(t.id) || isPremium;
             const active = current.themeId === t.id;
+            // 잠긴 테마는 누르면 상점으로 (구매 동선)
             return (
               <button
                 key={t.id}
-                style={{ ...themeChip, ...(active ? themeChipActive : {}), opacity: owned ? 1 : 0.4 }}
-                onClick={() => owned && setTheme(t.id)}
-                disabled={!owned}
+                style={{ ...themeChip, ...(active ? themeChipActive : {}), opacity: owned ? 1 : 0.55 }}
+                onClick={() => (owned ? setTheme(t.id) : onGoShop())}
               >
                 {t.stageEmoji.bloom} {t.label}{owned ? '' : ' 🔒'}
               </button>
             );
           })}
         </div>
+        {MONETIZATION_READY && lockedCount > 0 && (
+          <p style={{ fontSize: 12, color: C.sub2, margin: '10px 0 0' }}>
+            🔒 테마를 누르면 상점에서 잠금을 풀 수 있어요
+          </p>
+        )}
       </div>
 
       {MONETIZATION_READY && (
@@ -204,6 +215,10 @@ const themeChip: CSSProperties = {
   fontSize: 13, fontWeight: 600, color: C.text, cursor: 'pointer', fontFamily: 'inherit',
 };
 const themeChipActive: CSSProperties = { background: C.greenSoft, border: `1px solid ${C.green}`, color: C.green };
+const themeMoreBtn: CSSProperties = {
+  background: 'none', border: 'none', color: C.green, fontSize: 13, fontWeight: 700,
+  cursor: 'pointer', fontFamily: 'inherit', padding: 0,
+};
 const inviteCard: CSSProperties = {
   background: '#FFF8E7', border: 'none', borderRadius: 20, padding: 20, textAlign: 'left',
   cursor: 'pointer', fontFamily: 'inherit',

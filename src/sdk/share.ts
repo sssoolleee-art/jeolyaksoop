@@ -11,8 +11,11 @@ export function inviteFriend(): void {
     const cleanup = contactsViral({
       options: { moduleId: VIRAL_MODULE_ID },
       onEvent: event => {
-        // 공유 성공 시 비료 1개 지급 (기획서 2.7)
-        if (event.type === 'sendViral') useAppStore.getState().addFertilizers(1);
+        // 공유 성공 시 콘솔 설정 수량(비료)만큼 지급 (기획서 2.7)
+        if (event.type === 'sendViral') {
+          const amount = event.data?.rewardAmount ?? 1;
+          useAppStore.getState().addFertilizers(amount);
+        }
         if (event.type === 'close') cleanup();
       },
       onError: () => cleanup(),
