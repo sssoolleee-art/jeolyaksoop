@@ -6,7 +6,7 @@ import { C } from './ui';
 const SLIDES = [
   { emoji: '✋', title: '참았다면, 기록하세요', body: '커피 한 잔, 배달 한 번.\n참은 소비를 2탭으로 기록해요.' },
   { emoji: '🌳', title: '참은 만큼 나무가 자라요', body: '참은 금액이 물방울이 되어\n나무를 키우고 숲이 돼요.' },
-  { emoji: '📊', title: '일요일 밤, 소비 리포트', body: '내 소비 페르소나와 위험 시간대를\n매주 알려드려요.' },
+  { emoji: '📊', title: '일요일 밤, 소비 리포트', body: '내 절약 유형과 위험 시간대를\n매주 알려드려요.' },
 ];
 
 import { MONTHLY_GOALS as GOALS } from '../constants/goals';
@@ -103,7 +103,7 @@ const goalCard: CSSProperties = {
   background: C.card, border: '1.5px solid transparent', borderRadius: 16, padding: '16px 18px',
   textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit', color: C.text,
 };
-const goalCardActive: CSSProperties = { borderColor: C.green, background: C.greenSoft, color: C.green };
+const goalCardActive: CSSProperties = { border: `1.5px solid ${C.green}`, background: C.greenSoft, color: C.green };
 const notifRow: CSSProperties = {
   display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, width: '100%',
   background: C.card, border: 'none', borderRadius: 16, padding: '16px 18px', marginTop: 24,

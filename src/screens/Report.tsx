@@ -84,7 +84,7 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
   const share = async () => {
     const totalAll = records.reduce((a, r) => a + r.amount, 0);
     const text = [
-      `🌳 나의 소비 페르소나: ${report.personaTitle}`,
+      `${report.personaEmoji} 나의 절약 유형: ${report.personaTitle}`,
       `절제력 ${report.score}점 · ${report.live ? '이번 주' : '지난주'} ${report.totalSaved.toLocaleString()}원 지킴`,
       report.personaComment,
       ``,
@@ -110,17 +110,16 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
             일요일 밤, 한 주의 절약 성적표가 나와요
           </p>
           <p style={{ fontSize: 14, color: C.sub, margin: 0, lineHeight: 1.6 }}>
-            기록이 쌓이면 내 소비 페르소나와 절제력 점수,{'\n'}유혹이 몰린 시간대까지 분석해드려요
+            기록이 쌓이면 내 절약 유형과 절제력 점수,{'\n'}유혹이 몰린 시간대까지 분석해드려요
           </p>
         </div>
         <div style={{ ...card, opacity: 0.55 }}>
           <p style={{ fontSize: 12, fontWeight: 700, color: C.sub2, margin: '0 0 8px' }}>미리보기</p>
-          <p style={personaTitle}>새벽 배달 유혹 파이터</p>
-          <p style={personaComment}>밤 11시의 치킨을 이긴 사람은 뭐든 이길 수 있어요.</p>
-          <div style={{ display: 'flex', alignItems: 'flex-end', marginTop: 12 }}>
-            <span style={{ fontSize: 36, fontWeight: 800, color: C.green, lineHeight: 1 }}>76</span>
-            <span style={{ fontSize: 15, color: C.sub, marginLeft: 2 }}>점</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div style={personaAvatar}><span style={{ fontSize: 40, lineHeight: 1 }}>🌙</span></div>
+            <p style={{ ...personaTitle, margin: 0 }}>새벽 배달 유혹 파이터</p>
           </div>
+          <p style={personaComment}>밤 11시의 치킨을 이긴 사람은 뭐든 이길 수 있어요.</p>
         </div>
         <Button display="block" size="large" onClick={onGoHome}>첫 절약 기록하기</Button>
       </div>
@@ -171,12 +170,17 @@ export default function Report({ onGoShop, onGoHome }: { onGoShop: () => void; o
         </div>
       ) : (
       <>
-      {/* 정체성(페르소나)과 성적(점수)은 다른 정보 — 카드 분리 */}
+      {/* 정체성(절약 유형)과 성적(점수)은 다른 정보 — 카드 분리 */}
       <div style={personaCard}>
-        <p style={cardTitle}>나의 소비 페르소나</p>
-        <p style={personaTitle}>{report.personaTitle}</p>
+        <p style={cardTitle}>이번 주 나의 절약 유형</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, margin: '4px 0 2px' }}>
+          <div style={personaAvatar}>
+            <span style={{ fontSize: 40, lineHeight: 1 }}>{report.personaEmoji}</span>
+          </div>
+          <p style={{ ...personaTitle, margin: 0 }}>{report.personaTitle}</p>
+        </div>
         <p style={personaComment}>{report.personaComment}</p>
-        <button style={shareBtn} onClick={share}>내 페르소나 자랑하기</button>
+        <button style={shareBtn} onClick={share}>내 유형 자랑하기</button>
       </div>
 
       <div style={card}>
@@ -304,6 +308,12 @@ const lockCard: CSSProperties = {
 const personaCard: CSSProperties = {
   background: 'linear-gradient(150deg, #EAF5F0 0%, #FFFFFF 55%)',
   borderRadius: 20, padding: 20,
+};
+const personaAvatar: CSSProperties = {
+  width: 68, height: 68, borderRadius: 34, flexShrink: 0,
+  background: 'radial-gradient(circle, #FFFFFF 0%, #E7F6EF 100%)',
+  border: '2px solid #D3EBDD',
+  display: 'flex', alignItems: 'center', justifyContent: 'center',
 };
 const missionTrack: CSSProperties = {
   height: 8, background: C.bg, borderRadius: 4, marginTop: 12, overflow: 'hidden',

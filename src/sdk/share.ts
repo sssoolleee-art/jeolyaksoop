@@ -3,7 +3,7 @@ import { useAppStore } from '../store/useAppStore';
 import { track } from './analytics';
 
 // 친구 초대 (연락처 공유 리워드). moduleId는 콘솔 미니앱 > 공유 리워드 메뉴에서 발급.
-const VIRAL_MODULE_ID = 'PENDING_VIRAL_MODULE_ID';
+const VIRAL_MODULE_ID = '576f6288-edcb-4e09-b550-0185b1e630bc';
 
 export function inviteFriend(): void {
   track('invite_sent');

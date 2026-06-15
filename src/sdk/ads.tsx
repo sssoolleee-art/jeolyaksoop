@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { TossAds, loadFullScreenAd, showFullScreenAd } from '@apps-in-toss/web-framework';
 
-// TODO: 앱인토스 콘솔에서 광고 ID 발급 후 교체 (배너 1, 보상형 1 — 기획서 2.5)
+// 앱인토스 콘솔 발급 광고 ID (앱 ID 41619)
 export const AD_IDS = {
-  banner: 'PENDING_BANNER_AD_ID',
-  rewarded: 'PENDING_REWARDED_AD_ID',
+  banner: 'ait.v2.live.7881a5b2dbb04d1a',        // 배너 — 나의 숲 하단
+  rewarded: 'ait.v2.live.23558bf039cb4c2a',      // 리워드 — 홈 "광고 보고 물방울"
+  interstitial: 'ait.v2.live.f7a89a8dd2454926',  // 전면형
 };
 
 // 배너: 도감 화면 하단 1개만 (홈에는 두지 않는다 — 코어 루프 보호)

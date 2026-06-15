@@ -3,6 +3,7 @@ import { CategoryId } from '../types';
 export interface Persona {
   id: string;
   match: { category: CategoryId | 'any'; hourBand: 'morning' | 'day' | 'evening' | 'night' | 'any' };
+  emoji: string;        // 유형을 시각화하는 캐릭터 아바타
   title: string;
   comments: string[];
 }
@@ -10,7 +11,7 @@ export interface Persona {
 // 판정 우선순위: 배열 앞이 우선. category+hourBand 구체 매치 → any 매치 순.
 export const PERSONAS: Persona[] = [
   { id: 'night_delivery', match: { category: 'delivery', hourBand: 'night' },
-    title: '새벽 배달 유혹 파이터',
+    emoji: '🌙', title: '새벽 배달 유혹 파이터',
     comments: [
       '밤 11시의 치킨을 이긴 사람은 뭐든 이길 수 있어요.',
       '이번 주 가장 위험했던 순간, 전부 버텨냈네요.',
@@ -19,7 +20,7 @@ export const PERSONAS: Persona[] = [
       '새벽의 당신, 낮의 당신이 고마워하고 있어요.',
     ] },
   { id: 'evening_delivery', match: { category: 'delivery', hourBand: 'evening' },
-    title: '저녁 배달 끊기 챔피언',
+    emoji: '🍗', title: '저녁 배달 끊기 챔피언',
     comments: [
       '퇴근 후 "시켜 먹을까"를 {count}번 이겼어요.',
       '배달비에 최소주문금액까지, {amount}원이 그대로 남았어요.',
@@ -28,7 +29,7 @@ export const PERSONAS: Persona[] = [
       '오늘 저녁도 집밥 승리. 통장이 조용히 박수 치는 중.',
     ] },
   { id: 'morning_coffee', match: { category: 'coffee', hourBand: 'morning' },
-    title: '모닝 카페인 절제러',
+    emoji: '☕', title: '모닝 카페인 절제러',
     comments: [
       '아메리카노 {count}잔을 참았어요. 카페인 대신 의지력 충전.',
       '커피값 {amount}원이 그대로 남았어요.',
@@ -37,7 +38,7 @@ export const PERSONAS: Persona[] = [
       '내성 리셋 중. 다음 커피가 더 맛있을 거예요.',
     ] },
   { id: 'night_shopping', match: { category: 'shopping', hourBand: 'night' },
-    title: '새벽 장바구니 비우기 달인',
+    emoji: '🛒', title: '새벽 장바구니 비우기 달인',
     comments: [
       '새벽의 장바구니는 아침에 보면 다 필요 없는 것들이죠. 이미 알고 계셨네요.',
       '결제 직전에 멈춘 {count}번. 그게 제일 어려운 건데요.',
@@ -46,7 +47,7 @@ export const PERSONAS: Persona[] = [
       '장바구니에 넣는 건 무료니까, 거기까지만.',
     ] },
   { id: 'day_shopping', match: { category: 'shopping', hourBand: 'day' },
-    title: '점심시간 지름 차단러',
+    emoji: '🛍️', title: '점심시간 지름 차단러',
     comments: [
       '점심시간의 "잠깐 구경만"이 제일 위험한데, {count}번 다 막았어요.',
       '특가 알림을 보고도 닫은 사람. 흔치 않아요.',
@@ -55,7 +56,7 @@ export const PERSONAS: Persona[] = [
       '세일은 다음 달에도 해요. 당신은 이미 알고 있었고요.',
     ] },
   { id: 'night_taxi', match: { category: 'taxi', hourBand: 'night' },
-    title: '막차 수호자',
+    emoji: '🚕', title: '막차 수호자',
     comments: [
       '막차를 잡은 밤이 {count}번. 택시비 {amount}원이 무사해요.',
       '11시 50분의 전력질주, 그 가치는 충분했어요.',
@@ -64,7 +65,7 @@ export const PERSONAS: Persona[] = [
       '오늘도 지하철이 당신의 영웅이에요.',
     ] },
   { id: 'day_snack', match: { category: 'snack', hourBand: 'day' },
-    title: '오후 간식 방어단',
+    emoji: '🍩', title: '오후 간식 방어단',
     comments: [
       '오후 3시의 디저트 유혹, {count}번 전부 방어 성공.',
       '편의점 신상은 다음 주에도 신상이에요. 잘 참았어요.',
@@ -73,7 +74,7 @@ export const PERSONAS: Persona[] = [
       '작은 금액이라고 무시 못 해요. 간식이 제일 자주 오는 유혹이거든요.',
     ] },
   { id: 'evening_drink', match: { category: 'drink', hourBand: 'evening' },
-    title: '2차 탈출의 고수',
+    emoji: '🍺', title: '2차 탈출의 고수',
     comments: [
       '"딱 한 잔만 더"를 끊고 일어난 {count}번. 진짜 어려운 일이에요.',
       '술값 {amount}원과 내일 아침의 컨디션을 동시에 지켰어요.',
@@ -82,7 +83,7 @@ export const PERSONAS: Persona[] = [
       '오늘 밤의 절제가 내일의 숙취 해장비까지 아꼈어요.',
     ] },
   { id: 'subscription_cutter', match: { category: 'subscription', hourBand: 'any' },
-    title: '구독 정리 마스터',
+    emoji: '📺', title: '구독 정리 마스터',
     comments: [
       '안 보는 구독을 해지한 결단. 매달 자동으로 절약돼요.',
       '구독료 {amount}원, 이건 한 번 참으면 매달 돌아오는 절약이에요.',
@@ -91,7 +92,7 @@ export const PERSONAS: Persona[] = [
       '스트리밍보다 재밌는 건 줄어든 카드 명세서예요.',
     ] },
   { id: 'all_rounder', match: { category: 'any', hourBand: 'any' },
-    title: '균형 잡힌 절약 올라운더',
+    emoji: '🌿', title: '균형 잡힌 절약 올라운더',
     comments: [
       '특정 유혹에 약하지 않은 타입. 골고루 잘 참았어요.',
       '카테고리 편식 없는 절약. 제일 오래가는 유형이에요.',

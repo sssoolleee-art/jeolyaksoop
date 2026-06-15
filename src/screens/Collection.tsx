@@ -116,7 +116,7 @@ export default function Collection() {
       )}
 
       <div style={{ flex: 1 }} />
-      {MONETIZATION_READY && !adsRemoved && <BannerAd />}
+      {MONETIZATION_READY && !adsRemoved && !isPremium && <BannerAd />}
 
       <Sheet visible={selected !== null} onClose={() => setSelected(null)}>
         {selected && <TreeDetail tree={selected} growing={!selected.completedAt} />}
@@ -203,7 +203,7 @@ const themeChip: CSSProperties = {
   background: C.bg, border: '1px solid transparent', borderRadius: 20, padding: '8px 14px',
   fontSize: 13, fontWeight: 600, color: C.text, cursor: 'pointer', fontFamily: 'inherit',
 };
-const themeChipActive: CSSProperties = { background: C.greenSoft, borderColor: C.green, color: C.green };
+const themeChipActive: CSSProperties = { background: C.greenSoft, border: `1px solid ${C.green}`, color: C.green };
 const inviteCard: CSSProperties = {
   background: '#FFF8E7', border: 'none', borderRadius: 20, padding: 20, textAlign: 'left',
   cursor: 'pointer', fontFamily: 'inherit',

@@ -13,7 +13,9 @@ export function grant(productId: string) {
   if (productId === 'fert_m') s.addFertilizers(5);
   if (productId === 'remove_ads') s.setAdsRemoved(true);
   THEME_PACKS[productId]?.forEach(id => s.addTheme(id));
-  if (productId.startsWith('premium')) { s.setPremium(true); s.setAdsRemoved(true); }
+  // 프리미엄은 isPremium만 켠다. 광고 숨김은 (adsRemoved || isPremium)로 판단하므로
+  // 구독 해지 시 adsRemoved 단품 구매가 없으면 광고가 정상 복구된다.
+  if (productId.startsWith('premium')) s.setPremium(true);
   track(`purchase_${productId}`);
 }
 

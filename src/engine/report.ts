@@ -55,6 +55,7 @@ export function buildWeeklyReport(opts: {
     activeDays: agg.activeDays,
     score, scoreBreakdown: breakdown,
     personaId: persona.id,
+    personaEmoji: persona.emoji,
     personaTitle: persona.title,
     personaComment: fill(rotate(persona.comments, seed),
       { count: topCat.count, amount: topCat.amount.toLocaleString() }),

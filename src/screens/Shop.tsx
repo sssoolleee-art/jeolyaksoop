@@ -32,7 +32,7 @@ export default function Shop() {
   const priceOf = (p: Product) => prices?.[p.id] ?? `${p.priceKrw.toLocaleString()}원`;
 
   const owned = (p: Product) =>
-    (p.id === 'remove_ads' && adsRemoved && !isPremium) ||
+    (p.id === 'remove_ads' && (adsRemoved || isPremium)) ||   // 단품 구매 or 프리미엄
     (THEME_PACKS[p.id]?.every(t => ownedThemes.includes(t)) ?? false) ||
     (p.type === 'subscription' && isPremium);
 
@@ -47,8 +47,7 @@ export default function Shop() {
               {p.id === 'fert_s' && fertilizers > 0 && (
                 <span style={{ fontSize: 12, color: C.sub, fontWeight: 400 }}> · {fertilizers}개 보유</span>
               )}
-              {p.id === 'premium_y' && <span style={badge}>43% 할인</span>}
-              {p.id === 'premium_m' && <span style={badge}>첫 달 50% 오퍼</span>}
+              {p.id === 'premium_y' && <span style={badge}>48% 할인</span>}
             </p>
             <p style={{ fontSize: 13, color: C.sub, margin: '3px 0 0' }}>{p.description}</p>
           </div>

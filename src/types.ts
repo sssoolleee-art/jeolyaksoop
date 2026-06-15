@@ -27,6 +27,7 @@ export interface WeeklyReport {
   score: number;              // 0~100
   scoreBreakdown: { freq: number; volume: number; consistency: number };
   personaId: string;
+  personaEmoji: string;
   personaTitle: string;
   personaComment: string;
   summary: string;
