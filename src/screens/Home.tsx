@@ -8,6 +8,7 @@ import { haptic, shareText } from '../sdk/share';
 import RecordSheet from './RecordSheet';
 import { C, Sheet, Toast } from './ui';
 import { PushConsent } from '../utils/growth';
+import { FeedbackButton } from '../utils/feedback';
 
 export default function Home({ onOpenSettings, onGoShop }: {
   onOpenSettings: () => void; onGoShop: () => void;
@@ -160,6 +161,7 @@ export default function Home({ onOpenSettings, onGoShop }: {
       />
 
       <PushConsent templateCode="jeolyaksoop-daily" label="🔔 매일 저녁 8시 절약 기록 알림 받기" storageKey="saving_push_agreed" />
+      <FeedbackButton app="jeolyaksoop" />
       {/* 첫 기록 직후 1회: 루프 설명 (동기 피크 시점) */}
       <Sheet visible={firstRecord !== null} onClose={() => setFirstRecord(null)}>
         <div style={{ textAlign: 'center' }}>
